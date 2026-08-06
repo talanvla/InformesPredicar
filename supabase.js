@@ -70,3 +70,41 @@ async function obtenerInspeccion(id){
     return data;
 
 }
+
+/* ===========================
+   SUBIR FOTO
+=========================== */
+
+async function subirFoto(file, numeroInspeccion, seccion){
+
+    const extension = file.name.split(".").pop();
+
+    const nombreArchivo =
+        Date.now() + "." + extension;
+
+    const ruta =
+        `${numeroInspeccion}/${seccion}/${nombreArchivo}`;
+
+    const { error } = await db.storage
+
+        .from("fotos")
+
+        .upload(ruta, file);
+
+    if(error){
+
+    console.error("Error Storage:", error);
+
+    throw error;
+
+}
+
+    const { data } = db.storage
+
+        .from("fotos")
+
+        .getPublicUrl(ruta);
+
+    return data.publicUrl;
+
+}

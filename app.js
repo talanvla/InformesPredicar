@@ -5,6 +5,7 @@ const APP = {
     step: 0,
 
     historial:[],
+    numeroInspeccion:"",
     data: {
         cliente:{},
         datos:{},
@@ -2108,39 +2109,59 @@ function activarInputPreview(inputId, previewId){
 
     });
 
-    input.onchange=()=>{
+    input.onchange = async () => {
 
-        APP.data[seccion].fotos=[];
+    APP.data[seccion].fotos = [];
 
-        cont.innerHTML="";
+    cont.innerHTML = "";
 
-        [...input.files].forEach(file=>{
+    // Si aún no existe un número de inspección, lo generamos
+    if(!APP.numeroInspeccion){
 
-            const url=URL.createObjectURL(file);
+        APP.numeroInspeccion =
+            await obtenerNumeroInspeccion();
+
+    }
+
+    for(const file of input.files){
+
+        try{
+
+            const url = await subirFoto(
+
+                file,
+
+                APP.numeroInspeccion,
+
+                seccion
+
+            );
 
             APP.data[seccion].fotos.push({
 
-                file:file,
+                url: url,
 
-                url:url,
-
-                nombre:file.name,
-
-                tipo:file.type,
-
-                tamano:file.size
+                nombre: file.name
 
             });
 
-            const img=document.createElement("img");
+            const img = document.createElement("img");
 
-            img.src=url;
+            img.src = url;
 
             cont.appendChild(img);
 
-        });
+        }catch(error){
 
-    };
+            console.error(error);
+
+            alert("No se pudo subir la foto.");
+
+        }
+
+    }
+
+};
 
 }
 
@@ -2243,6 +2264,8 @@ async function guardarInspeccion(){
 
         window.open("reporte.html","_blank");
 
+        reiniciarFormulario();
+
     }catch(error){
 
         console.error(error);
@@ -2308,3 +2331,38 @@ async function generarPDF(){
 }
 
 
+function reiniciarFormulario(){
+
+    APP.step = 0;
+
+    APP.numeroInspeccion = "";
+
+    APP.data = {
+
+        cliente:{},
+
+        datos:{},
+
+        carroceria:{},
+
+        obd1:{},
+
+        motor:{},
+
+        prueba:{},
+
+        obd2:{},
+
+        legal:{},
+
+        conclusion:{},
+
+        resumen:{}
+
+    };
+
+    APP.screen = "dashboard";
+
+    render();
+
+}
