@@ -1,0 +1,261 @@
+body{
+
+    background:#ddd;
+
+    font-family:Arial,Helvetica,sans-serif;
+
+    margin:0;
+
+    padding:30px;
+
+}
+
+/*======================
+PORTADA Y SECCIONES
+=======================*/
+
+.portada,
+.seccion{
+
+    background:white;
+
+    width:210mm;
+
+    margin:20px auto;
+
+    padding:20mm;
+
+    box-sizing:border-box;
+
+    box-shadow:0 0 15px rgba(0,0,0,.25);
+
+}
+
+/* La portada siempre empieza el informe */
+
+.portada{
+
+    page-break-after:always;
+
+}
+
+/* Cada sección inicia en una hoja nueva */
+
+.seccion{
+
+    page-break-before:always;
+
+}
+
+/*======================
+ENCABEZADO
+=======================*/
+
+.encabezado{
+
+    display:flex;
+
+    align-items:flex-start;
+
+    gap:25px;
+
+    border-bottom:2px solid #222;
+
+    padding-bottom:20px;
+
+    margin-bottom:35px;
+
+}
+
+.logo-area{
+
+    width:200px;
+
+    flex-shrink:0;
+
+}
+
+.logo{
+
+    width:180px;
+
+    height:auto;
+
+    display:block;
+
+}
+
+.empresa{
+
+    flex:1;
+
+}
+
+.empresa h1{
+
+    margin:0;
+
+    font-size:24px;
+
+    font-weight:bold;
+
+}
+
+.empresa h2{
+
+    margin:10px 0 15px 0;
+
+    font-size:18px;
+
+}
+
+.empresa p{
+
+    margin:6px 0;
+
+    font-size:14px;
+
+}
+
+/*======================
+TÍTULOS
+=======================*/
+
+h3{
+
+    margin-top:35px;
+
+    border-bottom:2px solid #222;
+
+    padding-bottom:8px;
+
+}
+
+/*======================
+TABLAS
+=======================*/
+
+.tabla{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:20px;
+
+}
+
+.tabla td{
+
+    border:1px solid #bbb;
+
+    padding:10px;
+
+}
+
+/* Nunca cortar una tabla */
+
+.tabla{
+
+    page-break-inside:avoid;
+
+}
+
+/*======================
+FOTOGRAFÍAS
+=======================*/
+
+.foto-item{
+
+    margin-top:25px;
+
+    margin-bottom:40px;
+
+    page-break-inside:avoid;
+
+    break-inside:avoid;
+
+}
+
+.foto-reporte{
+
+    display:block;
+
+    width:100%;
+
+    max-width:500px;
+
+    height:auto;
+
+    margin:auto;
+
+}
+
+/*======================
+BOTÓN
+=======================*/
+
+.no-print{
+
+    text-align:center;
+
+    margin:25px;
+
+}
+
+/*======================
+IMPRESIÓN
+=======================*/
+
+@page{
+
+    size:A4;
+
+    margin:15mm;
+
+}
+
+@media print{
+
+    body{
+
+        background:white;
+
+        margin:0;
+
+        padding:0;
+
+    }
+
+    .portada,
+    .seccion{
+
+        width:auto;
+
+        margin:0;
+
+        padding:0;
+
+        box-shadow:none;
+
+    }
+
+    .portada{
+
+        page-break-after:always;
+
+    }
+
+    .seccion{
+
+        page-break-before:always;
+
+    }
+
+    .no-print{
+
+        display:none;
+
+    }
+
+}
