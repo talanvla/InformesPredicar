@@ -4,6 +4,8 @@ localStorage.getItem("predicarReporte")
 
 );
 
+console.log(APPDATA);
+
 document.addEventListener("DOMContentLoaded",()=>{
 
     document.getElementById("fechaReporte").textContent =
