@@ -6,8 +6,11 @@ localStorage.getItem("predicarReporte")
 
 document.addEventListener("DOMContentLoaded",()=>{
 
-    document.getElementById("fechaReporte").textContent=
-        new Date().toLocaleDateString("es-PE");
+    document.getElementById("fechaReporte").textContent =
+        APPDATA.fecha_inspeccion || "";
+
+    document.getElementById("numeroInspeccion").textContent =
+        APPDATA.numero_inspeccion || "";
 
 });
 

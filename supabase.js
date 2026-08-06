@@ -24,15 +24,17 @@ async function guardarInspeccionSupabase(inspeccion) {
     return data[0];
 }
 
-async function obtenerNumeroInspeccion() {
+function obtenerNumeroInspeccion(placa){
 
-    const { count, error } = await db
-        .from("inspecciones")
-        .select("*", { count: "exact", head: true });
+    const hoy = new Date();
 
-    if (error) throw error;
+    const fecha =
+        hoy.getFullYear().toString() +
+        String(hoy.getMonth()+1).padStart(2,"0") +
+        String(hoy.getDate()).padStart(2,"0");
 
-    return "PA-" + String((count || 0) + 1).padStart(6, "0");
+    return `${fecha}-${placa.toUpperCase()}`;
+
 }
 
 async function obtenerInspecciones(){

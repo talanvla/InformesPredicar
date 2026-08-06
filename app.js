@@ -2119,7 +2119,7 @@ function activarInputPreview(inputId, previewId){
     if(!APP.numeroInspeccion){
 
         APP.numeroInspeccion =
-            await obtenerNumeroInspeccion();
+            obtenerNumeroInspeccion(APP.data.datos.placa);
 
     }
 
@@ -2229,7 +2229,13 @@ async function guardarInspeccion(){
 
     try{
 
-        const numero = await obtenerNumeroInspeccion();
+        const numero =
+        APP.numeroInspeccion ||
+        obtenerNumeroInspeccion(APP.data.datos.placa);
+
+        APP.numeroInspeccion = numero;
+        APP.data.numero_inspeccion = numero;
+        APP.data.fecha_inspeccion = new Date().toLocaleDateString("es-PE");
 
         const inspeccion = {
 
