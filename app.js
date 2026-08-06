@@ -32,7 +32,7 @@ const APP = {
 
     steps:[
 
-    "Datos del Cliente",
+    
 
     "Datos del Vehículo",
 
@@ -49,6 +49,7 @@ const APP = {
     "Analisis Legal",
 
     "Conclusion",
+    "Datos del Cliente",
 
     "Resumen"
 
@@ -217,50 +218,51 @@ function render() {
 `;
 activarPreview();
 
-if(APP.step===0){
-    cargarFormulario("cliente");
-    activarGuardadoAutomatico("cliente");
-}
 
-if(APP.step===1){
+
+if(APP.step===0){
     cargarFormulario("datos");
     activarGuardadoAutomatico("datos");
 }
 
-if(APP.step===2){
+if(APP.step===1){
     cargarFormulario("carroceria");
     activarGuardadoAutomatico("carroceria");
 }
 
-if(APP.step===3){
+if(APP.step===2){
     cargarFormulario("obd1");
     activarGuardadoAutomatico("obd1");
 }
 
-if(APP.step===4){
+if(APP.step===3){
     cargarFormulario("motor");
     activarGuardadoAutomatico("motor");
 }
 
-if(APP.step===5){
+if(APP.step===4){
     cargarFormulario("prueba");
     activarGuardadoAutomatico("prueba");
 }
 
-if(APP.step===6){
+if(APP.step===5){
     cargarFormulario("obd2");
     activarGuardadoAutomatico("obd2");
 }
-if(APP.step===7){
+if(APP.step===6){
     cargarFormulario("legal");
     activarGuardadoAutomatico("legal");
 }
 
-if(APP.step===8){
+if(APP.step===7){
     cargarFormulario("conclusion");
     activarGuardadoAutomatico("conclusion");
 }
 
+if(APP.step===8){
+    cargarFormulario("cliente");
+    activarGuardadoAutomatico("cliente");
+}
 
 if(APP.step===9){
     cargarFormulario("resumen");
@@ -533,7 +535,7 @@ async function abrirInspeccion(id){
 
 const PASOS=[
 
-pasoCliente,
+
 pasoDatos,
 
 pasoCarroceria,
@@ -549,6 +551,7 @@ pasoObd2,
 pasoLegal,
 
 pasoConclusion,
+pasoCliente,
 
 pasoResumen
 
@@ -1997,23 +2000,25 @@ ${control}
 
 function nextStep(){
 
-    if(APP.step===0) guardarFormulario("cliente");
+    
 
-    if(APP.step===1) guardarFormulario("datos");
+    if(APP.step===0) guardarFormulario("datos");
 
-    if(APP.step===2) guardarFormulario("carroceria");
+    if(APP.step===1) guardarFormulario("carroceria");
 
-    if(APP.step===3) guardarFormulario("obd1");
+    if(APP.step===2) guardarFormulario("obd1");
 
-    if(APP.step===4) guardarFormulario("motor");
+    if(APP.step===3) guardarFormulario("motor");
 
-    if(APP.step===5) guardarFormulario("prueba");
+    if(APP.step===4) guardarFormulario("prueba");
 
-    if(APP.step===6) guardarFormulario("obd2");
+    if(APP.step===5) guardarFormulario("obd2");
 
-    if(APP.step===7) guardarFormulario("legal");
+    if(APP.step===6) guardarFormulario("legal");
 
-    if(APP.step===8) guardarFormulario("conclusion");
+    if(APP.step===7) guardarFormulario("conclusion");
+
+    if(APP.step===8) guardarFormulario("cliente");
 
     if(APP.step===9) guardarFormulario("resumen");
 
