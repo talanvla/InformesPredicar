@@ -4,6 +4,7 @@ const APP = {
 
     step: 0,
 
+    historial:[],
     data: {
         cliente:{},
         datos:{},
@@ -137,8 +138,6 @@ const FORM = {
 
 
 window.onload = () => {
-
-    conectarSupabase();
 
     render();
 
@@ -278,9 +277,23 @@ function title(){
 
 }
 
-function go(screen){
+async function go(screen){
 
-    APP.screen=screen;
+    APP.screen = screen;
+
+    if(screen==="history"){
+
+        APP.historial = await obtenerInspecciones();
+
+    }
+
+    render();
+
+}
+
+async function cargarHistorial(){
+
+    APP.historial = await obtenerInspecciones();
 
     render();
 
@@ -440,15 +453,49 @@ placeholder="Buscar por placa...">
 
 <tbody>
 
+${
+APP.historial.length===0
+
+?
+
+`
+<tr>
+<td colspan="5">
+No hay inspecciones.
+</td>
+</tr>
+`
+
+:
+
+APP.historial.map(i=>`
+
 <tr>
 
-<td colspan="5">
+<td>${i.placa}</td>
 
-No hay inspecciones.
+<td>${i.marca}</td>
+
+<td>${i.modelo}</td>
+
+<td>${new Date(i.fecha).toLocaleDateString()}</td>
+
+<td>
+
+<button
+onclick="abrirInspeccion('${i.id}')">
+
+👁
+
+</button>
 
 </td>
 
 </tr>
+
+`).join("")
+
+}
 
 </tbody>
 
@@ -457,6 +504,29 @@ No hay inspecciones.
 </div>
 
 `;
+
+}
+
+async function abrirInspeccion(id){
+
+    try{
+
+        const inspeccion = await obtenerInspeccion(id);
+
+        localStorage.setItem(
+            "predicarReporte",
+            JSON.stringify(inspeccion.datos)
+        );
+
+        window.open("reporte.html","_blank");
+
+    }catch(error){
+
+        console.error(error);
+
+        alert("No se pudo abrir la inspección.");
+
+    }
 
 }
 
@@ -2134,20 +2204,54 @@ function activarGuardadoAutomatico(seccion){
 
 }
 
-function guardarInspeccion(){
+async function guardarInspeccion(){
 
-    localStorage.setItem(
+    try{
 
-        "predicarReporte",
+        const numero = await obtenerNumeroInspeccion();
 
-        JSON.stringify(APP.data)
+        const inspeccion = {
 
-    );
+            numero_inspeccion: numero,
 
-    window.open("reporte.html","_blank");
+            placa: APP.data.datos.placa,
+
+            cliente: APP.data.cliente.nombre_cliente,
+
+            telefono: APP.data.cliente.telefono_cliente,
+
+            marca: APP.data.datos.marca,
+
+            modelo: APP.data.datos.modelo,
+
+            anio: APP.data.datos.anio,
+
+            estado: "Finalizada",
+
+            datos: APP.data
+
+        };
+
+        const respuesta = await guardarInspeccionSupabase(inspeccion);
+
+        console.log("Inspección guardada:", respuesta);
+
+        localStorage.setItem(
+            "predicarReporte",
+            JSON.stringify(APP.data)
+        );
+
+        window.open("reporte.html","_blank");
+
+    }catch(error){
+
+        console.error(error);
+
+        alert("Error al guardar la inspección.\nRevisa la consola (F12).");
+
+    }
 
 }
-
 async function generarPDF(){
 
     const { jsPDF } = window.jspdf;
@@ -2202,3 +2306,5 @@ async function generarPDF(){
     pdf.save("Inspeccion.pdf");
 
 }
+
+
