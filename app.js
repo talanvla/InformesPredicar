@@ -2099,15 +2099,33 @@ function activarInputPreview(inputId, previewId){
 
     cont.innerHTML="";
 
-    APP.data[seccion].fotos.forEach(foto=>{
+console.log(
+    "Renderizando:",
+    seccion,
+    APP.data[seccion]
+);
 
-        const img=document.createElement("img");
+console.log(
+    "Renderizando:",
+    seccion,
+    APP.data[seccion]
+);
 
-        img.src=foto.url;
+console.log(
+    "Cantidad fotos:",
+    APP.data[seccion].fotos.length
+);
 
-        cont.appendChild(img);
 
-    });
+APP.data[seccion].fotos.forEach(foto=>{
+
+    const img=document.createElement("img");
+
+    img.src=foto.url;
+
+    cont.appendChild(img);
+
+});
 
     input.onchange = async () => {
 
