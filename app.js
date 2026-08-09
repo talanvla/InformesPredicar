@@ -282,11 +282,40 @@ function title(){
 
 async function go(screen){
 
+    // Historial protegido
+    if(screen === "history"){
+
+        const {
+            data: { session }
+        } = await db.auth.getSession();
+
+        if(!session){
+
+            mostrarLoginAdmin();
+
+            return;
+
+        }
+
+    }
+
     APP.screen = screen;
 
-    if(screen==="history"){
+    if(screen === "history"){
 
-        APP.historial = await obtenerInspecciones();
+        try{
+
+            APP.historial = await obtenerInspecciones();
+
+        }catch(error){
+
+            console.error(error);
+
+            alert("No se pudo cargar el historial.");
+
+            return;
+
+        }
 
     }
 
@@ -427,6 +456,13 @@ function history(){
 <h2>Historial</h2>
 
 <br>
+
+<button
+            onclick="cerrarSesionAdmin()"
+            style="margin-bottom:20px;">
+            🔒 Cerrar sesión
+        </button>
+
 
 <input
 
@@ -2389,6 +2425,167 @@ function reiniciarFormulario(){
         resumen:{}
 
     };
+
+    APP.screen = "dashboard";
+
+    render();
+
+}
+
+function mostrarLoginAdmin(){
+
+    const modal = document.createElement("div");
+
+    modal.id = "loginAdminModal";
+
+    modal.innerHTML = `
+
+        <div class="login-overlay">
+
+            <div class="login-box">
+
+                <h2>Acceso Administrador</h2>
+
+                <p>
+                    Ingrese sus credenciales para acceder al historial.
+                </p>
+
+                <input
+                    id="adminEmail"
+                    type="email"
+                    placeholder="Usuario / correo"
+                    autocomplete="username"
+                >
+
+                <input
+                    id="adminPassword"
+                    type="password"
+                    placeholder="Contraseña"
+                    autocomplete="current-password"
+                >
+
+                <div class="login-buttons">
+
+                    <button
+                        onclick="cerrarLoginAdmin()">
+                        Cancelar
+                    </button>
+
+                    <button
+                        class="primary"
+                        onclick="loginAdmin()">
+                        Ingresar
+                    </button>
+
+                </div>
+
+                <p
+                    id="loginError"
+                    class="login-error">
+                </p>
+
+            </div>
+
+        </div>
+
+    `;
+
+    document.body.appendChild(modal);
+
+}
+
+async function loginAdmin(){
+
+    const email =
+        document.getElementById("adminEmail").value.trim();
+
+    const password =
+        document.getElementById("adminPassword").value;
+
+    const errorBox =
+        document.getElementById("loginError");
+
+    errorBox.textContent = "";
+
+    if(!email || !password){
+
+        errorBox.textContent =
+            "Ingrese usuario y contraseña.";
+
+        return;
+
+    }
+
+    const { data, error } =
+        await db.auth.signInWithPassword({
+
+            email: email,
+
+            password: password
+
+        });
+
+    if(error){
+
+        console.error(error);
+
+        errorBox.textContent =
+            "Usuario o contraseña incorrectos.";
+
+        return;
+
+    }
+
+    cerrarLoginAdmin();
+
+    APP.screen = "history";
+
+    try{
+
+        APP.historial =
+            await obtenerInspecciones();
+
+        render();
+
+    }catch(error){
+
+        console.error(error);
+
+        alert("No se pudo cargar el historial.");
+
+    }
+
+}
+
+function cerrarLoginAdmin(){
+
+    const modal =
+        document.getElementById("loginAdminModal");
+
+    if(modal){
+
+        modal.remove();
+
+    }
+
+}
+
+async function cerrarSesionAdmin(){
+
+    const { error } =
+        await db.auth.signOut();
+
+    if(error){
+
+        console.error(error);
+
+        alert("No se pudo cerrar la sesión.");
+
+        return;
+
+    }
+
+    APP.historial = [];
 
     APP.screen = "dashboard";
 
