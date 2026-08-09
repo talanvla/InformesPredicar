@@ -283,7 +283,7 @@ function title(){
 async function go(screen){
 
     // Historial protegido
-    if(screen === "history"){
+    if(screen === "history"||screen==="inspection"){
 
         const {
             data: { session }
