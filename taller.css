@@ -1,0 +1,622 @@
+/* =====================================================
+   PREDICAR - PORTAL TALLERES
+===================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+
+    margin: 0;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background: #f3f4f6;
+
+    color: #111;
+
+}
+
+
+/* =====================================================
+   APP
+===================================================== */
+
+#app {
+
+    min-height: 100vh;
+
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+.login-page {
+
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #050505,
+            #151515
+        );
+
+}
+
+
+.login-box {
+
+    width: 420px;
+
+    max-width: 90%;
+
+    background: #fff;
+
+    padding: 40px;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 20px 60px
+        rgba(0,0,0,.35);
+
+}
+
+
+.login-logo {
+
+    text-align: center;
+
+    margin-bottom: 30px;
+
+}
+
+
+.login-logo h1 {
+
+    margin: 0;
+
+    font-size: 38px;
+
+    font-weight: 900;
+
+    color: #111;
+
+    letter-spacing: 2px;
+
+}
+
+
+.login-logo p {
+
+    margin: 6px 0 0;
+
+    color: #c99600;
+
+    font-weight: bold;
+
+    font-size: 13px;
+
+}
+
+
+.login-box label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-weight: bold;
+
+}
+
+
+.login-box input {
+
+    width: 100%;
+
+    padding: 13px;
+
+    margin-bottom: 18px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 7px;
+
+    font-size: 15px;
+
+}
+
+
+.btn-primary {
+
+    width: 100%;
+
+    border: none;
+
+    padding: 14px;
+
+    border-radius: 7px;
+
+    background: #d9a400;
+
+    color: #000;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+.btn-primary:hover {
+
+    background: #f0b800;
+
+}
+
+
+/* =====================================================
+   LAYOUT
+===================================================== */
+
+.layout {
+
+    min-height: 100vh;
+
+    display: flex;
+
+}
+
+
+.sidebar {
+
+    width: 250px;
+
+    background: #080808;
+
+    color: white;
+
+    padding: 25px 18px;
+
+}
+
+
+.logo {
+
+    padding: 10px;
+
+    margin-bottom: 35px;
+
+}
+
+
+.logo h2 {
+
+    margin: 0;
+
+    font-size: 30px;
+
+    letter-spacing: 2px;
+
+}
+
+
+.logo small {
+
+    color: #d9a400;
+
+}
+
+
+.menu {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+}
+
+
+.menu button {
+
+    border: none;
+
+    background: transparent;
+
+    color: #ddd;
+
+    text-align: left;
+
+    padding: 13px 15px;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+
+    font-size: 15px;
+
+}
+
+
+.menu button:hover,
+.menu button.active {
+
+    background: #d9a400;
+
+    color: #000;
+
+    font-weight: bold;
+
+}
+
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.main {
+
+    flex: 1;
+
+    padding: 30px;
+
+}
+
+
+.topbar {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 30px;
+
+}
+
+
+.topbar h1 {
+
+    margin: 0;
+
+    font-size: 28px;
+
+}
+
+
+.topbar p {
+
+    margin: 5px 0 0;
+
+    color: #666;
+
+}
+
+
+.user-info {
+
+    text-align: right;
+
+}
+
+
+.user-info strong {
+
+    display: block;
+
+}
+
+
+.user-info span {
+
+    color: #b88600;
+
+    font-size: 13px;
+
+}
+
+
+/* =====================================================
+   CARDS
+===================================================== */
+
+.cards {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 18px;
+
+    margin-bottom: 25px;
+
+}
+
+
+.card {
+
+    background: white;
+
+    border-radius: 12px;
+
+    padding: 22px;
+
+    box-shadow:
+        0 4px 15px
+        rgba(0,0,0,.07);
+
+}
+
+
+.card-title {
+
+    color: #666;
+
+    font-size: 14px;
+
+}
+
+
+.card-value {
+
+    margin-top: 10px;
+
+    font-size: 30px;
+
+    font-weight: bold;
+
+}
+
+
+.card-value.gold {
+
+    color: #c99600;
+
+}
+
+
+/* =====================================================
+   ACTIONS
+===================================================== */
+
+.actions {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 18px;
+
+    margin-bottom: 25px;
+
+}
+
+
+.action {
+
+    background: #111;
+
+    color: white;
+
+    border-radius: 12px;
+
+    padding: 25px;
+
+    cursor: pointer;
+
+}
+
+
+.action:hover {
+
+    background: #222;
+
+}
+
+
+.action h3 {
+
+    margin: 0 0 8px;
+
+    color: #d9a400;
+
+}
+
+
+.action p {
+
+    margin: 0;
+
+    color: #ccc;
+
+}
+
+
+/* =====================================================
+   TABLAS
+===================================================== */
+
+.panel {
+
+    background: white;
+
+    border-radius: 12px;
+
+    padding: 25px;
+
+    box-shadow:
+        0 4px 15px
+        rgba(0,0,0,.07);
+
+}
+
+
+.panel h2 {
+
+    margin-top: 0;
+
+}
+
+
+.table-wrapper {
+
+    overflow-x: auto;
+
+}
+
+
+table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+}
+
+
+th {
+
+    background: #111;
+
+    color: #fff;
+
+    padding: 12px;
+
+    text-align: left;
+
+}
+
+
+td {
+
+    padding: 12px;
+
+    border-bottom:
+        1px solid #eee;
+
+}
+
+
+.status {
+
+    display: inline-block;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+}
+
+
+.status.process {
+
+    background: #fff2c7;
+
+    color: #8a6500;
+
+}
+
+
+.status.finished {
+
+    background: #dff5e5;
+
+    color: #17733b;
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1000px) {
+
+    .cards {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+    .actions {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .layout {
+
+        flex-direction: column;
+
+    }
+
+    .sidebar {
+
+        width: 100%;
+
+    }
+
+    .menu {
+
+        flex-direction: row;
+
+        flex-wrap: wrap;
+
+    }
+
+    .main {
+
+        padding: 18px;
+
+    }
+
+    .cards {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .topbar {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+
+    }
+
+}
