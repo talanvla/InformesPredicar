@@ -177,6 +177,28 @@ async function obtenerMiTaller() {
 
 }
 
+/* =====================================================
+   NÚMERO DE INSPECCIÓN
+===================================================== */
+
+function obtenerNumeroInspeccionTaller(placa){
+
+    const hoy = new Date();
+
+    const fecha =
+        hoy.getFullYear().toString() +
+        String(hoy.getMonth() + 1).padStart(2, "0") +
+        String(hoy.getDate()).padStart(2, "0");
+
+    const placaLimpia =
+        String(placa || "")
+            .trim()
+            .toUpperCase()
+            .replace(/\s+/g, "");
+
+    return `PS-${fecha}-${placaLimpia}`;
+}
+
 
 /* =====================================================
    CREAR INGRESO
@@ -350,6 +372,9 @@ async function subirFotoTaller(
 }
 
 
+
+
+
 /* =====================================================
    GUARDAR REGISTRO DE FOTO
 ===================================================== */
@@ -418,3 +443,4 @@ async function obtenerFotosTaller(ingresoId) {
     return data;
 
 }
+
