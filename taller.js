@@ -681,41 +681,72 @@ function mostrarProgreso(){
 
 function renderPaso(){
 
-    switch(APP.step){
+    APP.step = Number(APP.step);
 
-        case 0:
-            return pasoDatos();
+    console.log(
+        "RENDERIZANDO PASO:",
+        APP.step
+    );
 
-        case 1:
-            return pasoCarroceria();
+    if(APP.step === 0){
 
-        default:
-
-            return `
-
-                <div class="panel">
-
-                    <h2>
-                        ${PASOS[APP.step]}
-                    </h2>
-
-                    <p>
-                        Este paso lo construiremos
-                        a continuación.
-                    </p>
-
-                    <button
-                        class="btn-primary"
-                        onclick="nextStep()"
-                    >
-                        Siguiente →
-                    </button>
-
-                </div>
-
-            `;
+        return pasoDatos();
 
     }
+
+    if(APP.step === 1){
+
+        return pasoCarroceria();
+
+    }
+
+    if(APP.step === 2){
+
+        return pasoVozCliente();
+
+    }
+
+    return `
+
+        <div class="panel">
+
+            <h2>
+                ${PASOS[APP.step]}
+            </h2>
+
+            <p>
+                Este paso lo construiremos
+                a continuación.
+            </p>
+
+            <div
+                style="
+                    display:flex;
+                    justify-content:space-between;
+                    gap:15px;
+                    margin-top:25px;
+                "
+            >
+
+                <button
+                    class="secondary"
+                    onclick="prevStep()"
+                >
+                    ← Anterior
+                </button>
+
+                <button
+                    class="btn-primary"
+                    onclick="nextStep()"
+                >
+                    Siguiente →
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
 
 }
 
@@ -1147,6 +1178,84 @@ function pasoCarroceria(){
 
 }
 
+function pasoVozCliente(){
+
+    return `
+
+        <div class="panel">
+
+            <h2>
+                3. Voz del cliente
+            </h2>
+
+            <br>
+
+            <div class="form-grid">
+
+                <div class="full">
+
+                    <label>
+                        ¿Qué desea que le hagan al vehículo?
+                    </label>
+
+                    <textarea
+                        id="solicitud_cliente"
+                        placeholder="Describa lo que el cliente solicita..."
+                    >${
+                        APP.data.voz_cliente.solicitud_cliente || ""
+                    }</textarea>
+
+                </div>
+
+                <div class="full">
+
+                    <label>
+                        Observaciones adicionales
+                    </label>
+
+                    <textarea
+                        id="observaciones_cliente"
+                        placeholder="Ingrese cualquier información adicional proporcionada por el cliente..."
+                    >${
+                        APP.data.voz_cliente.observaciones_cliente || ""
+                    }</textarea>
+
+                </div>
+
+            </div>
+
+            <br>
+
+            <div
+                style="
+                    display:flex;
+                    justify-content:space-between;
+                    gap:15px;
+                "
+            >
+
+                <button
+                    class="secondary"
+                    onclick="prevStep()"
+                >
+                    ← Anterior
+                </button>
+
+                <button
+                    class="btn-primary"
+                    onclick="nextStep()"
+                >
+                    Siguiente →
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+}
+
+
 
 /* =====================================================
    SELECT
@@ -1181,19 +1290,30 @@ function opcionesSelect(
 
 function prepararFormulario(){
 
-    const seccion =
-        APP.step === 0
-            ? "datos"
-            : APP.step === 1
-                ? "carroceria"
-                : null;
+    let seccion = null;
+
+    if(APP.step === 0){
+
+        seccion = "datos";
+
+    }
+
+    if(APP.step === 1){
+
+        seccion = "carroceria";
+
+    }
+
+    if(APP.step === 2){
+
+        seccion = "voz_cliente";
+
+    }
 
     if(!seccion)
         return;
 
-    activarGuardadoAutomatico(
-        seccion
-    );
+    activarGuardadoAutomatico(seccion);
 
     if(APP.step === 1){
 
@@ -1457,9 +1577,7 @@ function nextStep(){
 
     if(APP.step === 0){
 
-        guardarFormulario(
-            "datos"
-        );
+        guardarFormulario("datos");
 
         if(
             !APP.data.datos.placa ||
@@ -1491,6 +1609,15 @@ function nextStep(){
     }
 
 
+    if(APP.step === 2){
+
+        guardarFormulario(
+            "voz_cliente"
+        );
+
+    }
+
+
     if(
         APP.step <
         PASOS.length - 1
@@ -1503,7 +1630,6 @@ function nextStep(){
     }
 
 }
-
 
 /* =====================================================
    ANTERIOR
