@@ -1772,10 +1772,7 @@ function prepararFormulario(){
 
     }
 
-    activarGuardadoAutomatico(
-        seccion
-    );
-
+    
 
     /* =========================
        FOTOS CARROCERÍA
