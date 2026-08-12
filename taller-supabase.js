@@ -306,70 +306,57 @@ async function subirFotoTaller(
     numeroInspeccion,
     tallerId,
     seccion
-) {
+){
 
     const extension =
-        file.name
-            .split(".")
-            .pop();
+        file.name.split(".").pop().toLowerCase();
 
     const nombreArchivo =
         Date.now() +
         "-" +
-        Math.random()
-            .toString(36)
-            .substring(2, 8) +
+        Math.random().toString(36).substring(2,8) +
         "." +
         extension;
 
     const ruta =
-    `taller-${tallerId}/` +
-    `${numeroInspeccion}/` +
-    `${seccion}/` +
-    `${nombreArchivo}`;
+        `taller-${tallerId}/` +
+        `${numeroInspeccion}/` +
+        `${seccion}/` +
+        `${nombreArchivo}`;
 
-    console.log(
-        "Subiendo foto:",
-        ruta
-    );
+    const { error } =
+        await db.storage
+            .from("fotos")
+            .upload(
+                ruta,
+                file,
+                {
+                    cacheControl: "3600",
+                    upsert: false,
+                    contentType: file.type
+                }
+            );
 
-    const {
-        error
-    } = await db.storage
-        .from("fotos")
-        .upload(
-            ruta,
-            file
-        );
-
-    if (error) {
-
+    if(error){
         console.error(
-            "ERROR STORAGE:",
+            "ERROR SUBIENDO FOTO:",
             error
         );
-
         throw error;
-
     }
 
-    const {
-        data
-    } = db.storage
-        .from("fotos")
-        .getPublicUrl(ruta);
+    const { data } =
+        db.storage
+            .from("fotos")
+            .getPublicUrl(ruta);
 
     return {
-
         url: data.publicUrl,
-
         ruta: ruta,
-
-        nombre: file.name
-
+        nombre: nombreArchivo
     };
-
 }
+
 
 
 
