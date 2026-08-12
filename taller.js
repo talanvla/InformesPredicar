@@ -3172,8 +3172,8 @@ function generarReporteTaller(){
             taller:
                 APP.taller,
 
-            ingeniero:
-                "Ingeniero Mecatrónico",
+            jefetaller:
+                "Jefe de taller",
 
             data:
                 APP.data
