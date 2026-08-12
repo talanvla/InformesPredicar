@@ -444,3 +444,137 @@ async function obtenerFotosTaller(ingresoId) {
 
 }
 
+/* =====================================================
+   SUBIR FOTO - TALLERES
+===================================================== */
+
+async function subirFotoTaller(
+    file,
+    numeroInspeccion,
+    tallerId,
+    seccion
+){
+
+    if(!file){
+
+        throw new Error(
+            "No se recibió ningún archivo."
+        );
+
+    }
+
+    if(!numeroInspeccion){
+
+        throw new Error(
+            "No existe número de inspección."
+        );
+
+    }
+
+    if(!tallerId){
+
+        throw new Error(
+            "No existe taller asignado."
+        );
+
+    }
+
+    if(!seccion){
+
+        throw new Error(
+            "No existe sección."
+        );
+
+    }
+
+
+    const extension =
+        file.name
+            .split(".")
+            .pop()
+            .toLowerCase();
+
+
+    const nombreArchivo =
+        Date.now() +
+        "-" +
+        Math.random()
+            .toString(36)
+            .substring(2, 8) +
+        "." +
+        extension;
+
+
+    const ruta =
+        `taller-${tallerId}/` +
+        `${numeroInspeccion}/` +
+        `${seccion}/` +
+        `${nombreArchivo}`;
+
+
+    console.log(
+        "Subiendo foto:",
+        ruta
+    );
+
+
+    const { error } =
+        await db.storage
+
+            .from("fotos")
+
+            .upload(
+                ruta,
+                file,
+                {
+                    cacheControl: "3600",
+                    upsert: false,
+                    contentType:
+                        file.type || "image/jpeg"
+                }
+            );
+
+
+    if(error){
+
+        console.error(
+            "ERROR STORAGE:",
+            error
+        );
+
+        throw error;
+
+    }
+
+
+    const { data } =
+        db.storage
+
+            .from("fotos")
+
+            .getPublicUrl(ruta);
+
+
+    if(!data || !data.publicUrl){
+
+        throw new Error(
+            "No se pudo obtener la URL pública de la fotografía."
+        );
+
+    }
+
+
+    return {
+
+        url:
+            data.publicUrl,
+
+        ruta:
+            ruta,
+
+        nombre:
+            nombreArchivo
+
+    };
+
+}
