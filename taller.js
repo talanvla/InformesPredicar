@@ -16,6 +16,8 @@ let APP = {
 
     numeroInspeccion: "",
 
+    fotosPendientes: [],
+
     data: {
 
         datos: {
@@ -501,6 +503,8 @@ function iniciarNuevaInspeccion(){
 
     APP.numeroInspeccion = "";
 
+    APP.fotosPendientes=[];
+
     APP.data = {
 
         datos: {
@@ -701,6 +705,12 @@ function renderPaso(){
             return pasoPruebaManejo();
         case 5:
             return pasoEstadoFinal();
+        case 6:
+            return pasoConclusion();
+        case 7:
+            return pasoDatosCliente();
+        case 8:
+            return pasoResumen();
 
         default:
 
@@ -747,6 +757,842 @@ function renderPaso(){
     }
 
 }
+
+/* =====================================================
+   PASO 4 - ESTADO INICIAL DEL AUTO
+===================================================== */
+
+function pasoEstadoInicial(){
+
+    return `
+
+        <div class="panel">
+
+            <h2>
+                4. Estado inicial del auto
+            </h2>
+
+            <br>
+
+            <div class="form-grid">
+
+                <div>
+
+                    <label>
+                        Estado general
+                    </label>
+
+                    <select id="estado_general">
+
+                        ${opcionesSelect(
+                            [
+                                "Excelente",
+                                "Bueno",
+                                "Regular",
+                                "Malo"
+                            ],
+                            APP.data.estado_inicial.estado_general
+                        )}
+
+                    </select>
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Luces
+                    </label>
+
+                    <select id="luces">
+
+                        ${opcionesSelect(
+                            [
+                                "Funcionan correctamente",
+                                "Presentan observaciones",
+                                "No funcionan"
+                            ],
+                            APP.data.estado_inicial.luces
+                        )}
+
+                    </select>
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Neumáticos
+                    </label>
+
+                    <select id="neumaticos">
+
+                        ${opcionesSelect(
+                            [
+                                "Buen estado",
+                                "Desgaste moderado",
+                                "Desgaste excesivo"
+                            ],
+                            APP.data.estado_inicial.neumaticos
+                        )}
+
+                    </select>
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Interior
+                    </label>
+
+                    <select id="interior">
+
+                        ${opcionesSelect(
+                            [
+                                "Buen estado",
+                                "Regular",
+                                "Mal estado"
+                            ],
+                            APP.data.estado_inicial.interior
+                        )}
+
+                    </select>
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Exterior
+                    </label>
+
+                    <select id="exterior">
+
+                        ${opcionesSelect(
+                            [
+                                "Buen estado",
+                                "Regular",
+                                "Mal estado"
+                            ],
+                            APP.data.estado_inicial.exterior
+                        )}
+
+                    </select>
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Tablero
+                    </label>
+
+                    <select id="tablero">
+
+                        ${opcionesSelect(
+                            [
+                                "Sin observaciones",
+                                "Con observaciones"
+                            ],
+                            APP.data.estado_inicial.tablero
+                        )}
+
+                    </select>
+
+                </div>
+
+
+                <div class="full">
+
+                    <label>
+                        Observaciones
+                    </label>
+
+                    <textarea
+                        id="observaciones"
+                        placeholder="Describa el estado en que recibe el vehículo..."
+                    >${
+                        APP.data.estado_inicial.observaciones || ""
+                    }</textarea>
+
+                </div>
+
+
+                <div class="full">
+
+                    <label>
+                        Fotografías del estado inicial
+                    </label>
+
+                    <input
+                        type="file"
+                        id="fotoEstadoInicial"
+                        multiple
+                        accept="image/*"
+                    >
+
+                    <div
+                        id="previewEstadoInicial"
+                        class="preview"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <br>
+
+
+            <div
+                style="
+                    display:flex;
+                    justify-content:space-between;
+                    gap:15px;
+                "
+            >
+
+                <button
+                    class="secondary"
+                    onclick="prevStep()"
+                >
+                    ← Anterior
+                </button>
+
+
+                <button
+                    class="btn-primary"
+                    onclick="nextStep()"
+                >
+                    Siguiente →
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+/* =====================================================
+   PASO 7 - CONCLUSIÓN
+===================================================== */
+
+function pasoConclusion(){
+
+    return `
+
+        <div class="panel">
+
+            <h2>
+                7. Conclusión
+            </h2>
+
+            <br>
+
+            <div class="form-grid">
+
+                <div class="full">
+
+                    <label>
+                        Diagnóstico general
+                    </label>
+
+                    <textarea
+                        id="diagnostico_general"
+                        placeholder="Ingrese el diagnóstico general del vehículo..."
+                    >${
+                        APP.data.conclusion.diagnostico_general || ""
+                    }</textarea>
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Prioridad
+                    </label>
+
+                    <select id="prioridad">
+
+                        ${opcionesSelect(
+                            [
+                                "Baja",
+                                "Media",
+                                "Alta",
+                                "Crítica"
+                            ],
+                            APP.data.conclusion.prioridad
+                        )}
+
+                    </select>
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Resultado general
+                    </label>
+
+                    <select id="resultado_general">
+
+                        ${opcionesSelect(
+                            [
+                                "Conforme",
+                                "Con observaciones",
+                                "Requiere reparación",
+                                "No conforme"
+                            ],
+                            APP.data.conclusion.resultado_general
+                        )}
+
+                    </select>
+
+                </div>
+
+
+                <div class="full">
+
+                    <label>
+                        Trabajos recomendados
+                    </label>
+
+                    <textarea
+                        id="trabajos_recomendados"
+                        placeholder="Indique los trabajos o reparaciones recomendadas..."
+                    >${
+                        APP.data.conclusion.trabajos_recomendados || ""
+                    }</textarea>
+
+                </div>
+
+
+                <div class="full">
+
+                    <label>
+                        Observaciones finales
+                    </label>
+
+                    <textarea
+                        id="observaciones_finales"
+                        placeholder="Ingrese las observaciones finales..."
+                    >${
+                        APP.data.conclusion.observaciones_finales || ""
+                    }</textarea>
+
+                </div>
+
+            </div>
+
+            <br>
+
+            <div
+                style="
+                    display:flex;
+                    justify-content:space-between;
+                    gap:15px;
+                "
+            >
+
+                <button
+                    class="secondary"
+                    onclick="prevStep()"
+                >
+                    ← Anterior
+                </button>
+
+                <button
+                    class="btn-primary"
+                    onclick="nextStep()"
+                >
+                    Siguiente →
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+/* =====================================================
+   PASO 8 - DATOS DEL CLIENTE
+===================================================== */
+
+function pasoDatosCliente(){
+
+    return `
+
+        <div class="panel">
+
+            <h2>
+                8. Datos del cliente
+            </h2>
+
+            <br>
+
+            <div class="form-grid">
+
+                <div>
+
+                    <label>
+                        Nombre / Razón social
+                    </label>
+
+                    <input
+                        id="nombre"
+                        value="${
+                            APP.data.cliente.nombre || ""
+                        }"
+                        placeholder="Nombre del cliente"
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        DNI / RUC
+                    </label>
+
+                    <input
+                        id="documento"
+                        value="${
+                            APP.data.cliente.documento || ""
+                        }"
+                        placeholder="DNI o RUC"
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Teléfono
+                    </label>
+
+                    <input
+                        id="telefono"
+                        value="${
+                            APP.data.cliente.telefono || ""
+                        }"
+                        placeholder="Teléfono"
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Correo electrónico
+                    </label>
+
+                    <input
+                        id="email"
+                        type="email"
+                        value="${
+                            APP.data.cliente.email || ""
+                        }"
+                        placeholder="correo@cliente.com"
+                    >
+
+                </div>
+
+
+                <div class="full">
+
+                    <label>
+                        Observaciones
+                    </label>
+
+                    <textarea
+                        id="observaciones"
+                        placeholder="Observaciones del cliente..."
+                    >${
+                        APP.data.cliente.observaciones || ""
+                    }</textarea>
+
+                </div>
+
+            </div>
+
+            <br>
+
+            <div
+                style="
+                    display:flex;
+                    justify-content:space-between;
+                    gap:15px;
+                "
+            >
+
+                <button
+                    class="secondary"
+                    onclick="prevStep()"
+                >
+                    ← Anterior
+                </button>
+
+                <button
+                    class="btn-primary"
+                    onclick="nextStep()"
+                >
+                    Siguiente →
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+/* =====================================================
+   PASO 9 - RESUMEN
+===================================================== */
+
+function pasoResumen(){
+
+    const fotos = [
+
+        ...(APP.data.carroceria.fotos || []),
+
+        ...(APP.data.estado_inicial.fotos || []),
+
+        ...(APP.data.prueba_manejo.fotos || []),
+
+        ...(APP.data.estado_final.fotos || [])
+
+    ];
+
+    return `
+
+        <div class="panel">
+
+            <h2>
+                9. Resumen de la inspección
+            </h2>
+
+            <br>
+
+            <div class="summary-grid">
+
+                <div class="summary-card">
+
+                    <h3>
+                        Datos del vehículo
+                    </h3>
+
+                    <p>
+                        <strong>Placa:</strong>
+                        ${APP.data.datos.placa || "-"}
+                    </p>
+
+                    <p>
+                        <strong>Marca:</strong>
+                        ${APP.data.datos.marca || "-"}
+                    </p>
+
+                    <p>
+                        <strong>Modelo:</strong>
+                        ${APP.data.datos.modelo || "-"}
+                    </p>
+
+                    <p>
+                        <strong>Año:</strong>
+                        ${APP.data.datos.anio || "-"}
+                    </p>
+
+                    <p>
+                        <strong>VIN:</strong>
+                        ${APP.data.datos.vin || "-"}
+                    </p>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <h3>
+                        Carrocería
+                    </h3>
+
+                    <p>
+                        <strong>Carrocería:</strong>
+                        ${
+                            APP.data.carroceria.estado_carroceria
+                            || "-"
+                        }
+                    </p>
+
+                    <p>
+                        <strong>Pintura:</strong>
+                        ${
+                            APP.data.carroceria.estado_pintura
+                            || "-"
+                        }
+                    </p>
+
+                    <p>
+                        <strong>Hallazgos:</strong>
+                        ${
+                            APP.data.carroceria.hallazgos_carroceria
+                            || "-"
+                        }
+                    </p>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <h3>
+                        Voz del cliente
+                    </h3>
+
+                    <p>
+                        ${
+                            APP.data.voz_cliente.solicitud_cliente
+                            || "-"
+                        }
+                    </p>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <h3>
+                        Estado inicial
+                    </h3>
+
+                    <p>
+                        <strong>Estado:</strong>
+                        ${
+                            APP.data.estado_inicial.estado_general
+                            || "-"
+                        }
+                    </p>
+
+                    <p>
+                        ${
+                            APP.data.estado_inicial.observaciones
+                            || "-"
+                        }
+                    </p>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <h3>
+                        Prueba de manejo
+                    </h3>
+
+                    <p>
+                        <strong>Arranque:</strong>
+                        ${
+                            APP.data.prueba_manejo.arranque
+                            || "-"
+                        }
+                    </p>
+
+                    <p>
+                        <strong>Dirección:</strong>
+                        ${
+                            APP.data.prueba_manejo.direccion
+                            || "-"
+                        }
+                    </p>
+
+                    <p>
+                        <strong>Frenado:</strong>
+                        ${
+                            APP.data.prueba_manejo.frenado
+                            || "-"
+                        }
+                    </p>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <h3>
+                        Estado final
+                    </h3>
+
+                    <p>
+                        <strong>Estado:</strong>
+                        ${
+                            APP.data.estado_final.estado_general
+                            || "-"
+                        }
+                    </p>
+
+                    <p>
+                        ${
+                            APP.data.estado_final.observaciones
+                            || "-"
+                        }
+                    </p>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <h3>
+                        Conclusión
+                    </h3>
+
+                    <p>
+                        <strong>Resultado:</strong>
+                        ${
+                            APP.data.conclusion.resultado_general
+                            || "-"
+                        }
+                    </p>
+
+                    <p>
+                        <strong>Prioridad:</strong>
+                        ${
+                            APP.data.conclusion.prioridad
+                            || "-"
+                        }
+                    </p>
+
+                    <p>
+                        ${
+                            APP.data.conclusion.diagnostico_general
+                            || "-"
+                        }
+                    </p>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <h3>
+                        Cliente
+                    </h3>
+
+                    <p>
+                        <strong>Nombre:</strong>
+                        ${
+                            APP.data.cliente.nombre
+                            || "-"
+                        }
+                    </p>
+
+                    <p>
+                        <strong>Documento:</strong>
+                        ${
+                            APP.data.cliente.documento
+                            || "-"
+                        }
+                    </p>
+
+                    <p>
+                        <strong>Teléfono:</strong>
+                        ${
+                            APP.data.cliente.telefono
+                            || "-"
+                        }
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <br>
+
+
+            <div class="panel">
+
+                <h3>
+                    Fotografías
+                </h3>
+
+                <div
+                    class="preview"
+                >
+
+                    ${
+                        fotos.length
+
+                        ?
+
+                        fotos.map(
+                            foto => `
+                                <img
+                                    src="${foto.url}"
+                                    alt="Fotografía"
+                                >
+                            `
+                        ).join("")
+
+                        :
+
+                        "<p>No hay fotografías cargadas.</p>"
+                    }
+
+                </div>
+
+            </div>
+
+
+            <br>
+
+
+            <div
+                style="
+                    display:flex;
+                    justify-content:space-between;
+                    gap:15px;
+                "
+            >
+
+                <button
+                    class="secondary"
+                    onclick="prevStep()"
+                >
+                    ← Anterior
+                </button>
+
+                <button
+                    class="btn-primary"
+                    onclick="generarReporteTaller()"
+                >
+                    📄 Generar reporte
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
 
 function pasoEstadoFinal(){
 
@@ -1153,6 +1999,28 @@ function pasoPruebaManejo(){
                     }</textarea>
 
                 </div>
+
+            <div class="full">
+
+    <label>
+        Fotografías de la prueba de manejo
+    </label>
+
+    <input
+        type="file"
+        id="fotoPruebaManejo"
+        multiple
+        accept="image/*"
+    >
+
+    <div
+        id="previewPruebaManejo"
+        class="preview"
+    ></div>
+
+</div> 
+
+
 
             </div>
 
@@ -1810,6 +2678,17 @@ function prepararFormulario(){
         );
 
     }
+
+    if(APP.step === 4){
+
+    activarInputPreviewTaller(
+        "fotoPruebaManejo",
+        "previewPruebaManejo",
+        "prueba_manejo"
+    );
+
+    }
+
     if(APP.step === 5){
 
         activarInputPreviewTaller(
@@ -1882,8 +2761,13 @@ function activarInputPreviewTaller(
         APP.data[seccion].fotos = [];
 
 
-    cont.innerHTML = "";
+    /*
+    =====================================================
+    MOSTRAR FOTOS YA CARGADAS
+    =====================================================
+    */
 
+    cont.innerHTML = "";
 
     APP.data[seccion].fotos.forEach(
         foto => {
@@ -1893,8 +2777,7 @@ function activarInputPreviewTaller(
                     "img"
                 );
 
-            img.src =
-                foto.url;
+            img.src = foto.url;
 
             cont.appendChild(img);
 
@@ -1902,107 +2785,146 @@ function activarInputPreviewTaller(
     );
 
 
-    input.onchange = async () => {
+    /*
+    =====================================================
+    SELECCIONAR FOTOS
+    =====================================================
+    */
 
-        if(!APP.numeroInspeccion){
+    input.onchange = () => {
 
-            guardarFormulario("datos");
+        const proceso = (async () => {
 
-            if(
-                !APP.data.datos.placa
+            if(!APP.numeroInspeccion){
+
+                guardarFormulario("datos");
+
+                if(
+                    !APP.data.datos.placa ||
+                    !APP.data.datos.placa.trim()
+                ){
+
+                    alert(
+                        "Primero ingresa la placa."
+                    );
+
+                    input.value = "";
+
+                    return;
+
+                }
+
+                APP.numeroInspeccion =
+                    obtenerNumeroInspeccionTaller(
+                        APP.data.datos.placa
+                    );
+
+            }
+
+
+            for(
+                const file of input.files
             ){
 
-                alert(
-                    "Primero ingresa la placa."
-                );
+                try{
 
-                input.value = "";
+                    const resultado =
+                        await subirFotoTaller(
 
-                return;
+                            file,
+
+                            APP.numeroInspeccion,
+
+                            APP.taller.id,
+
+                            seccion
+
+                        );
+
+
+                    /*
+                    =================================================
+                    GUARDAR FOTO EN EL ESTADO DE LA INSPECCIÓN
+                    =================================================
+                    */
+
+                    APP.data[seccion]
+                        .fotos
+                        .push({
+
+                            url:
+                                resultado.url,
+
+                            ruta:
+                                resultado.ruta,
+
+                            nombre:
+                                resultado.nombre
+
+                        });
+
+
+                    /*
+                    =================================================
+                    MOSTRAR FOTO
+                    =================================================
+                    */
+
+                    const img =
+                        document.createElement(
+                            "img"
+                        );
+
+                    img.src =
+                        resultado.url;
+
+                    cont.appendChild(img);
+
+
+                }catch(error){
+
+                    console.error(
+                        "Error subiendo foto:",
+                        error
+                    );
+
+                    throw error;
+
+                }
 
             }
 
-            APP.numeroInspeccion =
-                obtenerNumeroInspeccionTaller(
-                    APP.data.datos.placa
+
+            /*
+            =================================================
+            PERMITIR VOLVER A SELECCIONAR EL MISMO ARCHIVO
+            =================================================
+            */
+
+            input.value = "";
+
+        })();
+
+
+        /*
+        =====================================================
+        REGISTRAR SUBIDA PENDIENTE
+        =====================================================
+        */
+
+        APP.fotosPendientes.push(
+            proceso
+        );
+
+
+        proceso.finally(() => {
+
+            APP.fotosPendientes =
+                APP.fotosPendientes.filter(
+                    p => p !== proceso
                 );
 
-        }
-
-
-        for(
-            const file of input.files
-        ){
-
-            try{
-
-                const resultado =
-                    await subirFotoTaller(
-
-                        file,
-
-                        APP.numeroInspeccion,
-
-                        APP.taller.id,
-
-                        seccion
-
-                    );
-
-
-                APP.data[seccion]
-                    .fotos
-                    .push({
-
-                        url:
-                            resultado.url,
-
-                        ruta:
-                            resultado.ruta,
-
-                        nombre:
-                            resultado.nombre
-
-                    });
-
-
-                const img =
-                    document.createElement(
-                        "img"
-                    );
-
-                img.src =
-                    resultado.url;
-
-                cont.appendChild(img);
-
-
-                console.log(
-                    "Foto guardada:",
-                    resultado.ruta
-                );
-
-
-            }catch(error){
-
-                console.error(
-                    "Error subiendo foto:",
-                    error
-                );
-
-                alert(
-                    "No se pudo subir la foto."
-                );
-
-            }
-
-        }
-
-
-        /* Permite volver a seleccionar
-           incluso el mismo archivo */
-
-        input.value = "";
+        });
 
     };
 
@@ -2013,7 +2935,33 @@ function activarInputPreviewTaller(
    SIGUIENTE
 ===================================================== */
 
-function nextStep(){
+async function nextStep(){
+
+    /*
+    =====================================================
+    ESPERAR FOTOS PENDIENTES
+    =====================================================
+    */
+
+    if(APP.fotosPendientes.length > 0){
+
+        try{
+
+            await Promise.all(
+                APP.fotosPendientes
+            );
+
+        }catch(error){
+
+            alert(
+                "No se pudo completar la carga de una fotografía. Revisa la foto antes de continuar."
+            );
+
+            return;
+
+        }
+
+    }
 
     if(APP.step === 0){
 
@@ -2079,6 +3027,21 @@ function nextStep(){
 
     }
 
+    if(APP.step === 6){
+
+    guardarFormulario(
+        "conclusion"
+    );
+
+}
+
+if(APP.step === 7){
+
+    guardarFormulario(
+        "cliente"
+    );
+
+}
 
 
 
@@ -2099,7 +3062,28 @@ function nextStep(){
    ANTERIOR
 ===================================================== */
 
-function prevStep(){
+async function prevStep(){
+
+    if(APP.fotosPendientes.length > 0){
+
+        try{
+
+            await Promise.all(
+                APP.fotosPendientes
+            );
+
+        }catch(error){
+
+            alert(
+                "No se pudo completar la carga de una fotografía."
+            );
+
+            return;
+
+        }
+
+    }
+
 
     if(APP.step > 0){
 
@@ -2110,7 +3094,6 @@ function prevStep(){
     }
 
 }
-
 
 /* =====================================================
    HISTORIAL
@@ -2176,3 +3159,31 @@ async function cerrarSesion(){
     }
 
 }
+
+function generarReporteTaller(){
+
+    localStorage.setItem(
+        "predicarTallerReporte",
+        JSON.stringify({
+
+            numeroInspeccion:
+                APP.numeroInspeccion,
+
+            taller:
+                APP.taller,
+
+            ingeniero:
+                "Ingeniero Mecatrónico",
+
+            data:
+                APP.data
+
+        })
+    );
+
+
+    window.location.href =
+        "reporte-taller.html";
+
+}
+

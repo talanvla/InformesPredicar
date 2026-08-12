@@ -500,3 +500,112 @@ async function subirFotoTaller(
     };
 
 }
+
+/* =====================================================
+   SUBIR LOGO DEL TALLER
+===================================================== */
+
+async function subirLogoTaller(
+    file,
+    tallerId
+){
+
+    if(!file){
+
+        throw new Error(
+            "No se seleccionó ningún logo."
+        );
+
+    }
+
+    if(!tallerId){
+
+        throw new Error(
+            "No existe taller asignado."
+        );
+
+    }
+
+
+    const extension =
+        file.name
+            .split(".")
+            .pop()
+            .toLowerCase();
+
+
+    const nombreArchivo =
+        `logo.${extension}`;
+
+
+    const ruta =
+        `${tallerId}/${nombreArchivo}`;
+
+
+    const {
+        error
+    } =
+        await db.storage
+
+            .from("logos_talleres")
+
+            .upload(
+                ruta,
+                file,
+                {
+                    cacheControl: "3600",
+                    upsert: true,
+                    contentType:
+                        file.type ||
+                        "image/png"
+                }
+            );
+
+
+    if(error){
+
+        console.error(
+            "ERROR SUBIENDO LOGO:",
+            error
+        );
+
+        throw error;
+
+    }
+
+
+    const {
+        data
+    } =
+        db.storage
+
+            .from("logos_talleres")
+
+            .getPublicUrl(
+                ruta
+            );
+
+
+    if(
+        !data ||
+        !data.publicUrl
+    ){
+
+        throw new Error(
+            "No se pudo obtener la URL del logo."
+        );
+
+    }
+
+
+    return {
+
+        url:
+            data.publicUrl,
+
+        ruta:
+            ruta
+
+    };
+
+}
