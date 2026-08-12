@@ -683,48 +683,289 @@ function renderPaso(){
 
     APP.step = Number(APP.step);
 
-    console.log(
-        "RENDERIZANDO PASO:",
-        APP.step
-    );
+    switch(APP.step){
 
-    if(APP.step === 0){
+        case 0:
+            return pasoDatos();
 
-        return pasoDatos();
+        case 1:
+            return pasoCarroceria();
+
+        case 2:
+            return pasoVozCliente();
+
+        case 3:
+            return pasoEstadoInicial();
+
+        case 4:
+            return pasoPruebaManejo();
+
+        default:
+
+            return `
+                <div class="panel">
+
+                    <h2>
+                        ${PASOS[APP.step]}
+                    </h2>
+
+                    <p>
+                        Este paso lo construiremos
+                        a continuación.
+                    </p>
+
+                    <div
+                        style="
+                            display:flex;
+                            justify-content:space-between;
+                            gap:15px;
+                            margin-top:25px;
+                        "
+                    >
+
+                        <button
+                            class="secondary"
+                            onclick="prevStep()"
+                        >
+                            ← Anterior
+                        </button>
+
+                        <button
+                            class="btn-primary"
+                            onclick="nextStep()"
+                        >
+                            Siguiente →
+                        </button>
+
+                    </div>
+
+                </div>
+            `;
 
     }
 
-    if(APP.step === 1){
+}
 
-        return pasoCarroceria();
-
-    }
-
-    if(APP.step === 2){
-
-        return pasoVozCliente();
-
-    }
+function pasoEstadoInicial(){
 
     return `
 
         <div class="panel">
 
             <h2>
-                ${PASOS[APP.step]}
+                4. Estado inicial del auto
             </h2>
 
-            <p>
-                Este paso lo construiremos
-                a continuación.
-            </p>
+            <br>
+
+            <div class="form-grid">
+
+                <div>
+
+                    <label>
+                        Estado general
+                    </label>
+
+                    <select id="estado_general">
+
+                        ${opcionesSelect(
+                            [
+                                "Excelente",
+                                "Bueno",
+                                "Regular",
+                                "Malo"
+                            ],
+                            APP.data.estado_inicial.estado_general
+                        )}
+
+                    </select>
+
+                </div>
+
+                <div>
+
+                    <label>
+                        Luces
+                    </label>
+
+                    <select id="luces">
+
+                        ${opcionesSelect(
+                            [
+                                "Funcionan correctamente",
+                                "Presentan observaciones",
+                                "No funcionan"
+                            ],
+                            APP.data.estado_inicial.luces
+                        )}
+
+                    </select>
+
+                </div>
+
+                <div>
+
+                    <label>
+                        Neumáticos
+                    </label>
+
+                    <select id="neumaticos">
+
+                        ${opcionesSelect(
+                            [
+                                "Buen estado",
+                                "Desgaste moderado",
+                                "Desgaste excesivo"
+                            ],
+                            APP.data.estado_inicial.neumaticos
+                        )}
+
+                    </select>
+
+                </div>
+
+                <div>
+
+                    <label>
+                        Interior
+                    </label>
+
+                    <select id="interior">
+
+                        ${opcionesSelect(
+                            [
+                                "Buen estado",
+                                "Regular",
+                                "Mal estado"
+                            ],
+                            APP.data.estado_inicial.interior
+                        )}
+
+                    </select>
+
+                </div>
+
+                <div>
+
+                    <label>
+                        Exterior
+                    </label>
+
+                    <select id="exterior">
+
+                        ${opcionesSelect(
+                            [
+                                "Buen estado",
+                                "Regular",
+                                "Mal estado"
+                            ],
+                            APP.data.estado_inicial.exterior
+                        )}
+
+                    </select>
+
+                </div>
+
+                <div>
+
+                    <label>
+                        Tablero
+                    </label>
+
+                    <select id="tablero">
+
+                        ${opcionesSelect(
+                            [
+                                "Sin observaciones",
+                                "Con observaciones"
+                            ],
+                            APP.data.estado_inicial.tablero
+                        )}
+
+                    </select>
+
+                </div>
+
+                <div>
+
+                    <label>
+                        Accesorios
+                    </label>
+
+                    <select id="accesorios">
+
+                        ${opcionesSelect(
+                            [
+                                "Completos",
+                                "Incompletos",
+                                "No verificados"
+                            ],
+                            APP.data.estado_inicial.accesorios
+                        )}
+
+                    </select>
+
+                </div>
+
+                <div class="full">
+
+                    <label>
+                        Daños existentes
+                    </label>
+
+                    <textarea
+                        id="danos_existentes"
+                        placeholder="Describa golpes, rayones, abolladuras u otros daños existentes..."
+                    >${
+                        APP.data.estado_inicial.danos_existentes || ""
+                    }</textarea>
+
+                </div>
+
+                <div class="full">
+
+                    <label>
+                        Observaciones
+                    </label>
+
+                    <textarea
+                        id="observaciones"
+                        placeholder="Observaciones generales del estado inicial..."
+                    >${
+                        APP.data.estado_inicial.observaciones || ""
+                    }</textarea>
+
+                </div>
+
+                <div class="full">
+
+                    <label>
+                        Fotografías del estado inicial
+                    </label>
+
+                    <input
+                        type="file"
+                        id="fotoEstadoInicial"
+                        multiple
+                        accept="image/*"
+                    >
+
+                    <div
+                        id="previewEstadoInicial"
+                        class="preview"
+                    ></div>
+
+                </div>
+
+            </div>
+
+            <br>
 
             <div
                 style="
                     display:flex;
                     justify-content:space-between;
                     gap:15px;
-                    margin-top:25px;
                 "
             >
 
@@ -749,6 +990,202 @@ function renderPaso(){
     `;
 
 }
+
+function pasoPruebaManejo(){
+
+    return `
+
+        <div class="panel">
+
+            <h2>
+                5. Prueba de manejo
+            </h2>
+
+            <br>
+
+            <div class="form-grid">
+
+                <div>
+
+                    <label>
+                        Arranque
+                    </label>
+
+                    <select id="arranque">
+
+                        ${opcionesSelect(
+                            [
+                                "Normal",
+                                "Con observaciones",
+                                "Deficiente"
+                            ],
+                            APP.data.prueba_manejo.arranque
+                        )}
+
+                    </select>
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Dirección
+                    </label>
+
+                    <select id="direccion">
+
+                        ${opcionesSelect(
+                            [
+                                "Normal",
+                                "Con observaciones",
+                                "Deficiente"
+                            ],
+                            APP.data.prueba_manejo.direccion
+                        )}
+
+                    </select>
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Frenado
+                    </label>
+
+                    <select id="frenado">
+
+                        ${opcionesSelect(
+                            [
+                                "Normal",
+                                "Con observaciones",
+                                "Deficiente"
+                            ],
+                            APP.data.prueba_manejo.frenado
+                        )}
+
+                    </select>
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Suspensión
+                    </label>
+
+                    <select id="suspension_manejo">
+
+                        ${opcionesSelect(
+                            [
+                                "Normal",
+                                "Con observaciones",
+                                "Deficiente"
+                            ],
+                            APP.data.prueba_manejo.suspension_manejo
+                        )}
+
+                    </select>
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Transmisión
+                    </label>
+
+                    <select id="transmision_manejo">
+
+                        ${opcionesSelect(
+                            [
+                                "Normal",
+                                "Con observaciones",
+                                "Deficiente"
+                            ],
+                            APP.data.prueba_manejo.transmision_manejo
+                        )}
+
+                    </select>
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Ruidos / vibraciones
+                    </label>
+
+                    <select id="ruidos">
+
+                        ${opcionesSelect(
+                            [
+                                "Sin ruidos",
+                                "Ruidos leves",
+                                "Ruidos anormales"
+                            ],
+                            APP.data.prueba_manejo.ruidos
+                        )}
+
+                    </select>
+
+                </div>
+
+
+                <div class="full">
+
+                    <label>
+                        Observaciones
+                    </label>
+
+                    <textarea
+                        id="observaciones_manejo"
+                        placeholder="Describa cualquier comportamiento observado durante la prueba..."
+                    >${
+                        APP.data.prueba_manejo.observaciones_manejo || ""
+                    }</textarea>
+
+                </div>
+
+            </div>
+
+            <br>
+
+            <div
+                style="
+                    display:flex;
+                    justify-content:space-between;
+                    gap:15px;
+                "
+            >
+
+                <button
+                    class="secondary"
+                    onclick="prevStep()"
+                >
+                    ← Anterior
+                </button>
+
+                <button
+                    class="btn-primary"
+                    onclick="nextStep()"
+                >
+                    Siguiente →
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
 
 
 /* =====================================================
@@ -1310,78 +1747,67 @@ function prepararFormulario(){
 
     }
 
-    if(!seccion)
+    if(APP.step === 3){
+
+        seccion = "estado_inicial";
+
+    }
+    
+    if(APP.step === 4){
+
+    seccion = "prueba_manejo";
+
+    }
+
+    if(!seccion){
+
         return;
 
-    activarGuardadoAutomatico(seccion);
+    }
+
+    activarGuardadoAutomatico(
+        seccion
+    );
+
+
+    /* =========================
+       FOTOS CARROCERÍA
+    ========================= */
 
     if(APP.step === 1){
 
         activarInputPreviewTaller(
+
             "fotoCarroceria",
+
             "previewCarroceria",
+
             "carroceria"
+
+        );
+
+    }
+
+
+    /* =========================
+       FOTOS ESTADO INICIAL
+    ========================= */
+
+    if(APP.step === 3){
+
+        activarInputPreviewTaller(
+
+            "fotoEstadoInicial",
+
+            "previewEstadoInicial",
+
+            "estado_inicial"
+
         );
 
     }
 
 }
-
-
-/* =====================================================
-   GUARDADO AUTOMÁTICO
-===================================================== */
-
-function activarGuardadoAutomatico(
-    seccion
-){
-
-    const cont =
-        document.querySelector(
-            ".form-grid"
-        );
-
-    if(!cont)
-        return;
-
-    cont.querySelectorAll(
-        "input,select,textarea"
-    ).forEach(c => {
-
-        if(c.type === "file")
-            return;
-
-        const guardar = () => {
-
-            APP.data[seccion][c.id] =
-                c.value;
-
-            /* Generar número apenas
-               tenemos placa */
-
-            if(
-                seccion === "datos" &&
-                c.id === "placa" &&
-                c.value.trim()
-            ){
-
-                APP.numeroInspeccion =
-                    obtenerNumeroInspeccionTaller(
-                        c.value
-                    );
-
-            }
-
-        };
-
-        c.oninput = guardar;
-
-        c.onchange = guardar;
-
-    });
-
-}
-
 
 /* =====================================================
    GUARDAR FORMULARIO
@@ -1616,6 +2042,23 @@ function nextStep(){
         );
 
     }
+
+    if(APP.step === 3){
+
+    guardarFormulario(
+        "estado_inicial"
+    );
+
+    }
+    if(APP.step === 4){
+
+    guardarFormulario(
+        "prueba_manejo"
+    );
+
+    }
+
+
 
 
     if(
