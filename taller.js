@@ -699,6 +699,8 @@ function renderPaso(){
 
         case 4:
             return pasoPruebaManejo();
+        case 5:
+            return pasoEstadoFinal();
 
         default:
 
@@ -746,14 +748,14 @@ function renderPaso(){
 
 }
 
-function pasoEstadoInicial(){
+function pasoEstadoFinal(){
 
     return `
 
         <div class="panel">
 
             <h2>
-                4. Estado inicial del auto
+                6. Estado final del auto
             </h2>
 
             <br>
@@ -775,7 +777,7 @@ function pasoEstadoInicial(){
                                 "Regular",
                                 "Malo"
                             ],
-                            APP.data.estado_inicial.estado_general
+                            APP.data.estado_final.estado_general
                         )}
 
                     </select>
@@ -796,7 +798,7 @@ function pasoEstadoInicial(){
                                 "Presentan observaciones",
                                 "No funcionan"
                             ],
-                            APP.data.estado_inicial.luces
+                            APP.data.estado_final.luces
                         )}
 
                     </select>
@@ -817,7 +819,7 @@ function pasoEstadoInicial(){
                                 "Desgaste moderado",
                                 "Desgaste excesivo"
                             ],
-                            APP.data.estado_inicial.neumaticos
+                            APP.data.estado_final.neumaticos
                         )}
 
                     </select>
@@ -838,7 +840,7 @@ function pasoEstadoInicial(){
                                 "Regular",
                                 "Mal estado"
                             ],
-                            APP.data.estado_inicial.interior
+                            APP.data.estado_final.interior
                         )}
 
                     </select>
@@ -859,7 +861,7 @@ function pasoEstadoInicial(){
                                 "Regular",
                                 "Mal estado"
                             ],
-                            APP.data.estado_inicial.exterior
+                            APP.data.estado_final.exterior
                         )}
 
                     </select>
@@ -879,7 +881,7 @@ function pasoEstadoInicial(){
                                 "Sin observaciones",
                                 "Con observaciones"
                             ],
-                            APP.data.estado_inicial.tablero
+                            APP.data.estado_final.tablero
                         )}
 
                     </select>
@@ -900,7 +902,7 @@ function pasoEstadoInicial(){
                                 "Incompletos",
                                 "No verificados"
                             ],
-                            APP.data.estado_inicial.accesorios
+                            APP.data.estado_final.accesorios
                         )}
 
                     </select>
@@ -910,14 +912,14 @@ function pasoEstadoInicial(){
                 <div class="full">
 
                     <label>
-                        Daños existentes
+                        Trabajos realizados
                     </label>
 
                     <textarea
-                        id="danos_existentes"
-                        placeholder="Describa golpes, rayones, abolladuras u otros daños existentes..."
+                        id="trabajos_realizados"
+                        placeholder="Describa los trabajos realizados durante la intervención..."
                     >${
-                        APP.data.estado_inicial.danos_existentes || ""
+                        APP.data.estado_final.trabajos_realizados || ""
                     }</textarea>
 
                 </div>
@@ -925,14 +927,14 @@ function pasoEstadoInicial(){
                 <div class="full">
 
                     <label>
-                        Observaciones
+                        Observaciones finales
                     </label>
 
                     <textarea
                         id="observaciones"
-                        placeholder="Observaciones generales del estado inicial..."
+                        placeholder="Describa el estado final del vehículo..."
                     >${
-                        APP.data.estado_inicial.observaciones || ""
+                        APP.data.estado_final.observaciones || ""
                     }</textarea>
 
                 </div>
@@ -940,18 +942,18 @@ function pasoEstadoInicial(){
                 <div class="full">
 
                     <label>
-                        Fotografías del estado inicial
+                        Fotografías del estado final
                     </label>
 
                     <input
                         type="file"
-                        id="fotoEstadoInicial"
+                        id="fotoEstadoFinal"
                         multiple
                         accept="image/*"
                     >
 
                     <div
-                        id="previewEstadoInicial"
+                        id="previewEstadoFinal"
                         class="preview"
                     ></div>
 
@@ -1758,6 +1760,11 @@ function prepararFormulario(){
     seccion = "prueba_manejo";
 
     }
+    if(APP.step === 5){
+
+    seccion = "estado_final";
+
+    }
 
     if(!seccion){
 
@@ -1806,6 +1813,16 @@ function prepararFormulario(){
         );
 
     }
+    if(APP.step === 5){
+
+        activarInputPreviewTaller(
+            "fotoEstadoFinal",
+            "previewEstadoFinal",
+            "estado_final"
+        );
+
+    }
+
 
 }
 
@@ -2054,6 +2071,13 @@ function nextStep(){
 
     guardarFormulario(
         "prueba_manejo"
+    );
+
+    }
+    if(APP.step === 5){
+
+    guardarFormulario(
+        "estado_final"
     );
 
     }
