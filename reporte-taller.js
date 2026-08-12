@@ -172,11 +172,11 @@ function cargarEncabezado(){
 
     document
         .getElementById(
-            "ingeniero"
+            "Jefe de taller"
         )
         .textContent =
             valor(
-                APPDATA.ingeniero
+                APPDATA.jefetaller
             );
 
     const logo =
