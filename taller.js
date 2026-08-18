@@ -15,6 +15,7 @@ let APP = {
     step: 0,
 
     numeroInspeccion: "",
+    ingresoId:null,
 
     fotosPendientes: [],
 
@@ -502,6 +503,7 @@ function iniciarNuevaInspeccion(){
     APP.step = 0;
 
     APP.numeroInspeccion = "";
+    APP.ingresoId=null;
 
     APP.fotosPendientes=[];
 
@@ -3043,6 +3045,25 @@ if(APP.step === 7){
 
 }
 
+try{
+
+        await guardarInspeccionTaller();
+
+    }catch(error){
+
+        console.error(
+            "Error guardando inspección:",
+            error
+        );
+
+        alert(
+            "No se pudo guardar la inspección en el historial."
+        );
+
+        return;
+
+    }
+
 
 
     if(
@@ -3096,6 +3117,164 @@ async function prevStep(){
 }
 
 /* =====================================================
+   GUARDAR INSPECCIÓN COMPLETA
+===================================================== */
+
+async function guardarInspeccionTaller(){
+
+    if(APP.ingresoId){
+
+        return APP.ingresoId;
+
+    }
+
+
+    if(!APP.numeroInspeccion){
+
+        throw new Error(
+            "No existe número de inspección."
+        );
+
+    }
+
+
+    if(!APP.taller){
+
+        throw new Error(
+            "No existe taller asignado."
+        );
+
+    }
+
+
+    if(!APP.session){
+
+        throw new Error(
+            "No existe sesión activa."
+        );
+
+    }
+
+
+    const ingreso = {
+
+        numero_inspeccion:
+            APP.numeroInspeccion,
+
+        taller_id:
+            APP.taller.id,
+
+        usuario_id:
+            APP.session.user.id,
+
+        fecha:
+            new Date().toISOString(),
+
+        estado:
+            "completada",
+
+        placa:
+            APP.data.datos.placa,
+
+        datos:
+            APP.data
+
+    };
+
+
+    console.log(
+        "Guardando inspección:",
+        ingreso
+    );
+
+
+    const resultado =
+        await guardarIngresoTaller(
+            ingreso
+        );
+
+
+    APP.ingresoId =
+        resultado.id;
+
+
+    console.log(
+        "Inspección guardada:",
+        resultado
+    );
+
+
+    /*
+       Guardar también el registro
+       de cada fotografía
+    */
+
+    const seccionesFotos = [
+
+        "carroceria",
+        "estado_inicial",
+        "prueba_manejo",
+        "estado_final"
+
+    ];
+
+
+    for(
+        const seccion of seccionesFotos
+    ){
+
+        const fotos =
+            APP.data[seccion]?.fotos || [];
+
+
+        for(
+            const foto of fotos
+        ){
+
+            try{
+
+                await guardarFotoTaller({
+
+                    ingreso_id:
+                        resultado.id,
+
+                    taller_id:
+                        APP.taller.id,
+
+                    seccion:
+                        seccion,
+
+                    nombre:
+                        foto.nombre,
+
+                    ruta:
+                        foto.ruta,
+
+                    url:
+                        foto.url
+
+                });
+
+            }catch(error){
+
+                console.error(
+                    "Error registrando fotografía:",
+                    error
+                );
+
+            }
+
+        }
+
+    }
+
+
+    return resultado.id;
+
+}
+
+
+/* =====================================================
    HISTORIAL
 ===================================================== */
 
@@ -3106,20 +3285,171 @@ async function mostrarHistorial(){
         const historial =
             await obtenerHistorialTaller();
 
-        console.log(
-            "Historial:",
-            historial
+
+        if(!historial || historial.length === 0){
+
+            alert(
+                "No hay inspecciones registradas."
+            );
+
+            return;
+
+        }
+
+
+        let html = `
+
+            <div class="panel">
+
+                <h2>
+                    Historial de inspecciones
+                </h2>
+
+                <div
+                    style="
+                        overflow-x:auto;
+                        margin-top:20px;
+                    "
+                >
+
+                    <table
+                        style="
+                            width:100%;
+                            border-collapse:collapse;
+                        "
+                    >
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Fecha
+                                </th>
+
+                                <th>
+                                    Inspección
+                                </th>
+
+                                <th>
+                                    Placa
+                                </th>
+
+                                <th>
+                                    Estado
+                                </th>
+
+                                <th>
+                                    Acción
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+        `;
+
+
+        historial.forEach(
+            ingreso => {
+
+                const fecha =
+                    ingreso.fecha
+                        ? new Date(
+                            ingreso.fecha
+                        ).toLocaleDateString(
+                            "es-PE"
+                        )
+                        : "-";
+
+
+                html += `
+
+                    <tr>
+
+                        <td>
+                            ${fecha}
+                        </td>
+
+                        <td>
+                            ${
+                                ingreso.numero_inspeccion
+                                || "-"
+                            }
+                        </td>
+
+                        <td>
+                            ${
+                                ingreso.placa
+                                || "-"
+                            }
+                        </td>
+
+                        <td>
+                            ${
+                                ingreso.estado
+                                || "-"
+                            }
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn-primary"
+                                onclick="
+                                    abrirInspeccionTaller(
+                                        ${ingreso.id}
+                                    )
+                                "
+                            >
+                                Ver
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
         );
 
-        alert(
-            "Historial cargado: " +
-            historial.length +
-            " registros."
-        );
+
+        html += `
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <br>
+
+                <button
+                    class="secondary"
+                    onclick="mostrarDashboard()"
+                >
+                    ← Volver
+                </button>
+
+            </div>
+
+        `;
+
+
+        document.getElementById(
+            "app"
+        ).innerHTML = html;
+
 
     }catch(error){
 
-        console.error(error);
+        console.error(
+            "Error cargando historial:",
+            error
+        );
 
         alert(
             "No se pudo cargar el historial."
@@ -3129,6 +3459,97 @@ async function mostrarHistorial(){
 
 }
 
+/* =====================================================
+   ABRIR INSPECCIÓN DEL HISTORIAL
+===================================================== */
+
+async function abrirInspeccionTaller(id){
+
+    try{
+
+        const ingreso =
+            await obtenerIngresoTaller(id);
+
+
+        if(!ingreso){
+
+            alert(
+                "No se encontró la inspección."
+            );
+
+            return;
+
+        }
+
+
+        /*
+         * Recuperamos los datos completos
+         * que guardamos dentro de ingresos_taller
+         */
+
+        APP.ingresoId =
+            ingreso.id;
+
+        APP.numeroInspeccion =
+            ingreso.numero_inspeccion;
+
+
+        APP.data =
+            ingreso.datos || APP.data;
+
+
+        /*
+         * Guardamos nuevamente los datos
+         * para que reporte-taller.html
+         * pueda utilizarlos.
+         */
+
+        localStorage.setItem(
+
+            "predicarTallerReporte",
+
+            JSON.stringify({
+
+                numeroInspeccion:
+                    ingreso.numero_inspeccion,
+
+                taller:
+                    APP.taller,
+
+                jefetaller:
+                    "Jefe de taller",
+
+                data:
+                    APP.data
+
+            })
+
+        );
+
+
+        /*
+         * Abrimos directamente
+         * el informe de esta inspección.
+         */
+
+        window.location.href =
+            "reporte-taller.html";
+
+
+    }catch(error){
+
+        console.error(
+            "Error abriendo inspección:",
+            error
+        );
+
+        alert(
+            "No se pudo abrir la inspección."
+        );
+
+    }
+
+}
 
 /* =====================================================
    CERRAR SESIÓN
