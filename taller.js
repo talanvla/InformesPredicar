@@ -354,6 +354,13 @@ function mostrarDashboard(){
                             Dashboard
                         </h1>
 
+                    <select
+                        id="selectorAnio"
+                        onchange="cargarEstadisticasDashboard()"
+                    >
+                    </select>
+
+
                         <p>
                             Portal de Taller
                         </p>
@@ -432,6 +439,97 @@ function mostrarDashboard(){
 
                 </div>
 
+<div class="cards">
+
+    <div class="card">
+        <div class="card-title">
+            Servicios este mes
+        </div>
+
+        <div
+            class="card-value"
+            id="serviciosMes"
+        >
+            0
+        </div>
+    </div>
+
+
+    <div class="card">
+        <div class="card-title">
+            Facturado este mes
+        </div>
+
+        <div
+            class="card-value gold"
+            id="facturadoMes"
+        >
+            S/ 0.00
+        </div>
+    </div>
+
+
+    <div class="card">
+        <div class="card-title">
+            Servicios este año
+        </div>
+
+        <div
+            class="card-value"
+            id="serviciosAnio"
+        >
+            0
+        </div>
+    </div>
+
+
+    <div class="card">
+        <div class="card-title">
+            Facturado este año
+        </div>
+
+        <div
+            class="card-value gold"
+            id="facturadoAnio"
+        >
+            S/ 0.00
+        </div>
+    </div>
+
+</div>
+
+
+<div
+    class="panel"
+    style="margin-top:25px;"
+>
+
+    <h2>
+        Servicios por mes
+    </h2>
+
+    <div id="graficoServicios"></div>
+
+</div>
+
+
+<div
+    class="panel"
+    style="margin-top:25px;"
+>
+
+    <h2>
+        Facturación por mes
+    </h2>
+
+    <div id="graficoFacturacion"></div>
+
+</div>
+
+
+
+
+
                 <div class="actions">
 
                     <div
@@ -488,6 +586,8 @@ function mostrarDashboard(){
         </div>
 
     `;
+
+    cargarEstadisticasDashboard();
 
 }
 
@@ -1175,6 +1275,25 @@ function pasoDatosCliente(){
                             APP.data.cliente.documento || ""
                         }"
                         placeholder="DNI o RUC"
+                    >
+
+                </div>
+
+                <div>
+
+                    <label>
+                        Monto del servicio (S/)
+                    </label>
+
+                    <input
+                        id="montoServicio"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value="${
+                            APP.data.cliente.montoServicio || ""
+                        }"
+                        placeholder="0.00"
                     >
 
                 </div>
@@ -3123,11 +3242,14 @@ async function prevStep(){
 
 async function guardarInspeccionTaller(){
 
-    if(APP.ingresoId){
+    if(
+    APP.ingresoId &&
+    !APP.modoEdicion
+){
 
-        return APP.ingresoId;
+    return APP.ingresoId;
 
-    }
+}
 
 
     if(!APP.numeroInspeccion){
@@ -3160,7 +3282,10 @@ async function guardarInspeccionTaller(){
     const ingreso = {
 
         numero_inspeccion:
-            APP.numeroInspeccion,
+            APP.modoEdicion
+            ? APP.numeroInspeccionOriginal
+            : APP.numeroInspeccion,
+
 
         taller_id:
             APP.taller.id,
@@ -3169,18 +3294,32 @@ async function guardarInspeccionTaller(){
             APP.session.user.id,
 
         fecha:
-            new Date().toISOString(),
+            APP.modoEdicion
+            ? APP.fechaOriginal
+            : new Date().toISOString(),
 
         estado:
             "completada",
 
         placa:
             APP.data.datos.placa,
-
+        
+        monto: Number(
+            APP.data.cliente.montoServicio || 0
+        ),
         datos:
-            APP.data
+            APP.data,
+
+        
 
     };
+
+    if(APP.modoEdicion){
+
+    ingreso.id =
+        APP.ingresoId;
+
+}
 
 
     console.log(
@@ -3191,7 +3330,8 @@ async function guardarInspeccionTaller(){
 
     const resultado =
         await guardarIngresoTaller(
-            ingreso
+            ingreso,
+            APP.modoEdicion
         );
 
 
@@ -3408,6 +3548,19 @@ async function mostrarHistorial(){
                                 Ver
                             </button>
 
+                                <button
+                                    class="secondary"
+                                    onclick="
+                                        editarInspeccionTaller(
+                                            ${ingreso.id}
+                                        )
+                                    "
+                style="margin-left:8px;"
+            >
+                ✏️ Editar
+            </button>      
+
+
                         </td>
 
                     </tr>
@@ -3463,6 +3616,82 @@ async function mostrarHistorial(){
 /* =====================================================
    ABRIR INSPECCIÓN DEL HISTORIAL
 ===================================================== */
+
+async function editarInspeccionTaller(id){
+
+    try{
+
+        const historial =
+            await obtenerHistorialTaller();
+
+        const ingreso =
+            (historial || []).find(
+                item => Number(item.id) === Number(id)
+            );
+
+        if(!ingreso){
+
+            alert(
+                "No se encontró la inspección."
+            );
+
+            return;
+
+        }
+
+        /*
+         * Cargar la inspección existente
+         */
+
+        APP.ingresoId =
+            ingreso.id;
+
+        APP.numeroInspeccion =
+            ingreso.numero_inspeccion;
+
+        APP.data =
+            ingreso.datos || APP.data;
+
+
+        APP.fechaOriginal =
+            ingreso.fecha;
+
+        APP.numeroInspeccionOriginal =
+            ingreso.numero_inspeccion;    
+
+        /*
+         * Marcar que estamos editando
+         */
+
+        APP.modoEdicion = true;
+
+        /*
+         * Abrir la inspección
+         * desde el primer paso
+         */
+
+        APP.step = 0;
+
+        APP.screen = "inspeccion";
+
+        renderInspeccion();
+
+    }catch(error){
+
+        console.error(
+            "Error abriendo inspección para editar:",
+            error
+        );
+
+        alert(
+            "No se pudo abrir la inspección para editar."
+        );
+
+    }
+
+}
+
+
 
 async function abrirInspeccionTaller(id){
 
@@ -3609,3 +3838,360 @@ function generarReporteTaller(){
 
 }
 
+async function cargarEstadisticasDashboard(){
+
+    try{
+
+        const selector =
+            document.getElementById("selectorAnio");
+
+        const anioActual =
+            new Date().getFullYear();
+
+        // Crear años solamente la primera vez
+        if(selector.options.length === 0){
+
+            for(
+                let anio = anioActual;
+                anio >= anioActual - 4;
+                anio--
+            ){
+
+                const opcion =
+                    document.createElement("option");
+
+                opcion.value = anio;
+                opcion.textContent = anio;
+
+                selector.appendChild(opcion);
+
+            }
+
+            selector.value = anioActual;
+
+        }
+
+
+        // Tomar el año que actualmente está seleccionado
+        const anioSeleccionado =
+            Number(selector.value);
+
+
+        const historial =
+            await obtenerHistorialTaller();
+
+
+        const ahora =
+            new Date();
+
+        const mesActual =
+            ahora.getMonth();
+
+
+        let serviciosMes = 0;
+        let facturadoMes = 0;
+
+        let serviciosAnio = 0;
+        let facturadoAnio = 0;
+
+
+        const serviciosPorMes =
+            Array(12).fill(0);
+
+        const facturacionPorMes =
+            Array(12).fill(0);
+
+
+        (historial || []).forEach(
+            ingreso => {
+
+                const fecha =
+                    new Date(
+                        ingreso.fecha
+                    );
+
+                const monto =
+                    Number(
+                        ingreso.monto ??
+                        ingreso.datos?.cliente?.montoServicio ??
+                        0
+                    );
+
+                const mes =
+                    fecha.getMonth();
+
+                const anio =
+                    fecha.getFullYear();
+
+
+                if(anio === anioSeleccionado){
+
+                    serviciosAnio++;
+
+                    facturadoAnio += monto;
+
+                    serviciosPorMes[mes]++;
+
+                    facturacionPorMes[mes] +=
+                        monto;
+
+
+                    if(
+                        anio === anioActual &&
+                        mes === mesActual
+                    ){
+
+                        serviciosMes++;
+
+                        facturadoMes += monto;
+
+                    }
+
+                }
+
+            }
+        );
+
+
+        document
+            .getElementById("serviciosMes")
+            .textContent =
+            serviciosMes;
+
+
+        document
+            .getElementById("facturadoMes")
+            .textContent =
+            "S/ " +
+            facturadoMes.toFixed(2);
+
+
+        document
+            .getElementById("serviciosAnio")
+            .textContent =
+            serviciosAnio;
+
+
+        document
+            .getElementById("facturadoAnio")
+            .textContent =
+            "S/ " +
+            facturadoAnio.toFixed(2);
+
+
+        crearGraficoServicios(
+            serviciosPorMes
+        );
+
+
+        crearGraficoFacturacion(
+            facturacionPorMes
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "Error cargando estadísticas:",
+            error
+        );
+
+    }
+
+}
+
+function crearGraficoServicios(
+    datos
+){
+
+    const meses = [
+        "Ene",
+        "Feb",
+        "Mar",
+        "Abr",
+        "May",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dic"
+    ];
+
+
+    const max =
+        Math.max(
+            ...datos,
+            1
+        );
+
+
+    const html =
+        datos.map(
+            (valor, i) => {
+
+                const ancho =
+                    (valor / max) * 100;
+
+
+                return `
+
+                    <div
+                        style="
+                            margin:10px 0;
+                        "
+                    >
+
+                        <div
+                            style="
+                                display:flex;
+                                justify-content:space-between;
+                                margin-bottom:4px;
+                            "
+                        >
+
+                            <span>
+                                ${meses[i]}
+                            </span>
+
+                            <strong>
+                                ${valor}
+                            </strong>
+
+                        </div>
+
+
+                        <div
+                            style="
+                                width:100%;
+                                height:18px;
+                                background:#eee;
+                                border-radius:8px;
+                                overflow:hidden;
+                            "
+                        >
+
+                            <div
+                                style="
+                                    width:${ancho}%;
+                                    height:100%;
+                                    background:#c9a227;
+                                "
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+        ).join("");
+
+
+    document
+        .getElementById(
+            "graficoServicios"
+        )
+        .innerHTML = html;
+
+}
+
+function crearGraficoFacturacion(
+    datos
+){
+
+    const meses = [
+        "Ene",
+        "Feb",
+        "Mar",
+        "Abr",
+        "May",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dic"
+    ];
+
+
+    const max =
+        Math.max(
+            ...datos,
+            1
+        );
+
+
+    const html =
+        datos.map(
+            (valor, i) => {
+
+                const ancho =
+                    (valor / max) * 100;
+
+
+                return `
+
+                    <div
+                        style="
+                            margin:10px 0;
+                        "
+                    >
+
+                        <div
+                            style="
+                                display:flex;
+                                justify-content:space-between;
+                                margin-bottom:4px;
+                            "
+                        >
+
+                            <span>
+                                ${meses[i]}
+                            </span>
+
+                            <strong>
+                                S/ ${valor.toFixed(2)}
+                            </strong>
+
+                        </div>
+
+
+                        <div
+                            style="
+                                width:100%;
+                                height:18px;
+                                background:#eee;
+                                border-radius:8px;
+                                overflow:hidden;
+                            "
+                        >
+
+                            <div
+                                style="
+                                    width:${ancho}%;
+                                    height:100%;
+                                    background:#333;
+                                "
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+        ).join("");
+
+
+    document
+        .getElementById(
+            "graficoFacturacion"
+        )
+        .innerHTML = html;
+
+}

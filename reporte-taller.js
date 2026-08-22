@@ -605,6 +605,11 @@ function crearCliente(){
                 ],
 
                 [
+                    "Monto del servicio S/",
+                    d.montoServicio
+                ],
+
+                [
                     "Teléfono",
                     d.telefono
                 ],

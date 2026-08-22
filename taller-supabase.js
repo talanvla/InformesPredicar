@@ -204,18 +204,44 @@ function obtenerNumeroInspeccionTaller(placa){
    CREAR INGRESO
 ===================================================== */
 
-async function guardarIngresoTaller(ingreso) {
+async function guardarIngresoTaller(
+    ingreso,
+    editar = false
+){
+
+    let query;
+
+
+    if(editar){
+
+        query = db
+            .from("ingresos_taller")
+            .update(ingreso)
+            .eq(
+                "id",
+                ingreso.id
+            )
+            .select()
+            .single();
+
+    }else{
+
+        query = db
+            .from("ingresos_taller")
+            .insert([ingreso])
+            .select()
+            .single();
+
+    }
+
 
     const {
         data,
         error
-    } = await db
-        .from("ingresos_taller")
-        .insert([ingreso])
-        .select()
-        .single();
+    } = await query;
 
-    if (error) {
+
+    if(error){
 
         console.error(
             "Error guardando ingreso:",
@@ -225,6 +251,7 @@ async function guardarIngresoTaller(ingreso) {
         throw error;
 
     }
+
 
     return data;
 
