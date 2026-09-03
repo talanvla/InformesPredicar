@@ -45,34 +45,92 @@ function crearTabla(titulo, filas){
 
 function crearGaleriaFotos(titulo,fotos){
 
-    if(!fotos || fotos.length===0)
+    if(!fotos || fotos.length === 0)
         return "";
 
-    return `
+
+    let html = `
 
         <h3>${titulo}</h3>
 
-        ${fotos.map((foto,index)=>`
+        <div class="seccion-galeria">
 
-            <div class="foto-item">
+    `;
 
-                <h4>
 
-                    Fotografía ${index+1}
+    for(
+        let i = 0;
+        i < fotos.length;
+        i += 4
+    ){
 
-                </h4>
+        const grupo =
+            fotos.slice(i,i+4);
 
-                <img
 
-                    class="foto-reporte"
+        html += `
 
-                    src="${foto.url}">
+            <div class="galeria-grupo">
+
+                <div class="galeria-fotos">
+
+        `;
+
+
+        grupo.forEach(
+            (foto,index)=>{
+
+                const numero =
+                    i + index + 1;
+
+
+                html += `
+
+                    <div class="foto-item">
+
+                        <h4>
+
+                            Fotografía ${numero}
+
+                        </h4>
+
+                        <img
+
+                            class="foto-reporte"
+
+                            src="${foto.url}"
+
+                            alt="Fotografía ${numero}"
+
+                        >
+
+                    </div>
+
+                `;
+
+            }
+        );
+
+
+        html += `
+
+                </div>
 
             </div>
 
-        `).join("")}
+        `;
+
+    }
+
+
+    html += `
+
+        </div>
 
     `;
+
+
+    return html;
 
 }
 
