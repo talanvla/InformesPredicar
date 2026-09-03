@@ -26,7 +26,10 @@ const APP = {
 
         { id: "inspection", title: "🚗 Nueva inspección" },
 
-        { id: "history", title: "📄 Historial" }
+        { id: "history", title: "📄 Historial" },
+
+        {id: "taller",title: "🔧 Portal Taller"}   
+
 
     ],
 
@@ -282,8 +285,28 @@ function title(){
 
 async function go(screen){
 
-    // Historial protegido
-    if(screen === "history"||screen==="inspection"){
+    /*
+     * Abrir Portal Taller
+     */
+
+    if(screen === "taller"){
+
+        window.location.href =
+            "https://informes-predicar.vercel.app/taller.html";
+
+        return;
+
+    }
+
+
+    /*
+     * Historial y Nueva inspección protegidos
+     */
+
+    if(
+        screen === "history" ||
+        screen === "inspection"
+    ){
 
         const {
             data: { session }
@@ -299,25 +322,31 @@ async function go(screen){
 
     }
 
+
     APP.screen = screen;
+
 
     if(screen === "history"){
 
         try{
 
-            APP.historial = await obtenerInspecciones();
+            APP.historial =
+                await obtenerInspecciones();
 
         }catch(error){
 
             console.error(error);
 
-            alert("No se pudo cargar el historial.");
+            alert(
+                "No se pudo cargar el historial."
+            );
 
             return;
 
         }
 
     }
+
 
     render();
 

@@ -309,6 +309,8 @@ function mostrarDashboard(){
 
                 <nav class="menu">
 
+                    
+
                     <button
                         class="active"
                         onclick="mostrarDashboard()"
@@ -327,6 +329,9 @@ function mostrarDashboard(){
                     >
                         📋 Historial
                     </button>
+
+                    
+
 
                     <button
                         onclick="alert('Reportes próximamente')"
