@@ -452,3 +452,21 @@ box-shadow:0 2px 8px rgba(0,0,0,.2);
     text-align:center;
 }
 .volver-web:hover{color:#fff;border-color:rgba(255,255,255,.4)}
+
+
+/* Boton de editar en el historial */
+button.editar{
+    margin-left:6px;
+    background:#fff;
+    border:1px solid #d7dbe3;
+    color:#334;
+    border-radius:6px;
+    padding:4px 9px;
+    cursor:pointer;
+    font-size:14px;
+    line-height:1;
+}
+button.editar:hover{
+    border-color:#c0392b;
+    color:#c0392b;
+}

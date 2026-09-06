@@ -24,6 +24,26 @@ async function guardarInspeccionSupabase(inspeccion) {
     return data[0];
 }
 
+/* ===========================
+   ACTUALIZAR INSPECCION
+   Para cuando se edita una que ya existe: cambia la fila en vez de
+   crear otra. Sin esto, editar generaba un duplicado en el historial.
+=========================== */
+
+async function actualizarInspeccionSupabase(id, inspeccion) {
+
+    const { data, error } = await db
+        .from("inspecciones")
+        .update(inspeccion)
+        .eq("id", id)
+        .select();
+
+    if (error) throw error;
+
+    return data[0];
+}
+
+
 function obtenerNumeroInspeccion(placa){
 
     const hoy = new Date();

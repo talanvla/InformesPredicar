@@ -6,6 +6,9 @@ const APP = {
 
     historial:[],
     numeroInspeccion:"",
+
+    // id de la inspeccion que se esta editando; null si es nueva
+    editandoId:null,
     data: {
         cliente:{},
         datos:{},
@@ -281,7 +284,9 @@ function title(){
 
     if(APP.screen==="history") return "Historial";
 
-    return "Nueva inspección";
+    return APP.editandoId
+        ? "Editando " + (APP.numeroInspeccion || "informe")
+        : "Nueva inspección";
 
 }
 
@@ -290,6 +295,18 @@ async function go(screen){
     /*
      * Abrir Portal Taller
      */
+
+    /* Entrar por el menu a "Nueva inspeccion" siempre empieza en blanco.
+       Sin esto, si venias de editar, seguirias sobre el mismo informe. */
+    if(screen === "inspection" && APP.editandoId){
+        APP.editandoId = null;
+        APP.numeroInspeccion = "";
+        APP.data = {
+            cliente:{}, datos:{}, carroceria:{}, obd1:{}, motor:{},
+            prueba:{}, obd2:{}, legal:{}, conclusion:{}, resumen:{}
+        };
+        APP.step = 0;
+    }
 
     if(screen === "taller"){
 
@@ -559,6 +576,18 @@ onclick="abrirInspeccion('${i.id}')">
 
 </button>
 
+<button
+
+class="editar"
+
+title="Editar este informe"
+
+onclick="editarInspeccion('${i.id}')">
+
+&#9998;
+
+</button>
+
 </td>
 
 </tr>
@@ -576,6 +605,42 @@ onclick="abrirInspeccion('${i.id}')">
 `;
 
 }
+
+/* Abre una inspeccion guardada para corregirla.
+
+   Carga sus datos en el formulario y deja anotado el id, para que al
+   guardar se actualice esa misma fila y no se cree una copia. */
+
+async function editarInspeccion(id){
+
+    try{
+
+        const inspeccion = await obtenerInspeccion(id);
+
+        // secciones vacias por defecto: un informe viejo puede no traerlas
+        const vacio = {
+            cliente:{}, datos:{}, carroceria:{}, obd1:{}, motor:{},
+            prueba:{}, obd2:{}, legal:{}, conclusion:{}, resumen:{}
+        };
+
+        APP.data = Object.assign(vacio, inspeccion.datos || {});
+        APP.numeroInspeccion = inspeccion.numero_inspeccion || "";
+        APP.editandoId = inspeccion.id;
+        APP.step = 0;
+        APP.screen = "inspection";
+
+        render();
+
+    }catch(error){
+
+        console.error(error);
+
+        alert("No se pudo abrir la inspeccion para editar.");
+
+    }
+
+}
+
 
 async function abrirInspeccion(id){
 
@@ -2319,9 +2384,11 @@ async function guardarInspeccion(){
 
     try{
 
+        // Al editar se conserva el numero original: es el que ya lleva
+        // el PDF que el cliente tiene en la mano.
         const numero =
-        APP.numeroInspeccion ||
-        obtenerNumeroInspeccion(APP.data.datos.placa);
+            APP.numeroInspeccion ||
+            obtenerNumeroInspeccion(APP.data.datos.placa);
 
         APP.numeroInspeccion = numero;
         APP.data.numero_inspeccion = numero;
@@ -2349,9 +2416,14 @@ async function guardarInspeccion(){
 
         };
 
-        const respuesta = await guardarInspeccionSupabase(inspeccion);
+        // Si venimos de "Editar", se actualiza esa fila. Si no, se crea.
+        const respuesta = APP.editandoId
+            ? await actualizarInspeccionSupabase(APP.editandoId, inspeccion)
+            : await guardarInspeccionSupabase(inspeccion);
 
-        console.log("Inspección guardada:", respuesta);
+        const eraEdicion = !!APP.editandoId;
+
+        console.log(eraEdicion ? "Inspeccion actualizada:" : "Inspeccion guardada:", respuesta);
 
         localStorage.setItem(
             "predicarReporte",
@@ -2430,6 +2502,8 @@ async function generarPDF(){
 function reiniciarFormulario(){
 
     APP.step = 0;
+
+    APP.editandoId = null;
 
     APP.numeroInspeccion = "";
 
