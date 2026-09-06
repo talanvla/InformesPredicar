@@ -298,6 +298,39 @@ var RANGOS = [
 ];
 
 
+/* ============ MERCADO DE SEMINUEVOS ============
+
+   Transferencias de vehiculos livianos seminuevos en Peru, acumulado
+   enero-junio 2026 frente al mismo periodo de 2025.
+
+   Fuente: SUNARP, via el Informe del Sector Automotor de la AAP (julio
+   2026). Cada emparejamiento de marca y cifra se comprobo con la
+   aritmetica: el PDF entrega los numeros desordenados y era facil
+   atribuirle a una marca el dato de otra.
+
+   Lo que la AAP NO publica, y por eso no esta aqui: el desglose por
+   modelo, y las marcas de superlujo (Ferrari, Aston Martin, Porsche),
+   que caen dentro de "Otros" y no se pueden separar.                  */
+
+var MERCADO_TOTAL = { a2025: 274690, a2026: 314296, var: 14.4 };
+
+var MERCADO = {
+  alta: [
+    { m: "BMW",           a2025: 2571, a2026: 3141, v: 22.2, p: 1.0 },
+    { m: "Jeep",          a2025: 2155, a2026: 2404, v: 11.6, p: 0.8 },
+    { m: "Mercedes-Benz", a2025: 2154, a2026: 2317, v:  7.6, p: 0.7 },
+    { m: "Audi",          a2025: 1643, a2026: 2015, v: 22.6, p: 0.6 }
+  ],
+  media: [
+    { m: "Toyota",    a2025: 76914, a2026: 88005, v: 14.4, p: 28.0 },
+    { m: "Hyundai",   a2025: 30707, a2026: 34520, v: 12.4, p: 11.0 },
+    { m: "Kia",       a2025: 25036, a2026: 28483, v: 13.8, p:  9.1 },
+    { m: "Nissan",    a2025: 23399, a2026: 24742, v:  5.7, p:  7.9 },
+    { m: "Suzuki",    a2025: 14681, a2026: 16623, v: 13.2, p:  5.3 },
+    { m: "Chevrolet", a2025: 12527, a2026: 13724, v:  9.6, p:  4.4 }
+  ]
+};
+
 var STAR = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="flex:none;margin-right:7px;vertical-align:-1px"><path d="M8 1.4l1.9 4 4.3.6-3.1 3 .74 4.3L8 11.3l-3.84 2-.74-4.3-3.1-3 4.3-.6z" fill="#FFC94A"/></svg>';
 var CHKG = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2.5 7.4l3 3 6-6.6" stroke="#4A85FF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 var esc = function(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); };

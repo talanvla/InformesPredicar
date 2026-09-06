@@ -109,6 +109,7 @@ function render(){
   var subCasos = document.querySelector("#casos .sec-head > p:last-of-type");
   if (subCasos) subCasos.textContent = t(VIA === "broker" ? "casos.subbrk" : "casos.sub");
 
+  pintarMercado();
   pintarRangos();
 
   var brk = document.getElementById("brokerGrid");
@@ -270,6 +271,78 @@ document.addEventListener("keydown", function(e){
     }
   });
 })();
+
+
+/* ============ EL MERCADO DE SEMINUEVOS ============
+
+   Dos segmentos, alta gama y gama media, con las transferencias reales
+   de SUNARP. Las barras se dibujan con divs y no con una libreria de
+   graficos: son seis barras, no hace falta cargar 200 KB para eso, y asi
+   heredan los colores y el modo oscuro de la propia web.
+
+   La barra se mide contra la marca mas grande del segmento, no contra el
+   total del mercado: dentro de alta gama, Toyota aplastaria todo.       */
+
+var SEGMENTO = "alta";
+
+function pintarMercado(){
+  var tabs = document.getElementById("segTabs");
+  var caja = document.getElementById("mktGrid");
+  var pie  = document.getElementById("mktPie");
+  if (!tabs || !caja) return;
+
+  /* --- las dos pestanas --- */
+  tabs.innerHTML = [["alta", "sug.alta"], ["media", "sug.media"]].map(function(x){
+    return '<button type="button" class="seg-b' + (SEGMENTO === x[0] ? " on" : "") +
+           '" data-seg="' + x[0] + '">' + esc(t(x[1])) + "</button>";
+  }).join("");
+
+  tabs.querySelectorAll(".seg-b").forEach(function(b){
+    b.addEventListener("click", function(){
+      SEGMENTO = b.getAttribute("data-seg");
+      pintarMercado();
+    });
+  });
+
+  /* --- las barras --- */
+  var lista = MERCADO[SEGMENTO] || [];
+  var tope = lista.reduce(function(a, x){ return Math.max(a, x.a2026); }, 1);
+
+  // Cabecera con el nombre de cada columna. Sin esto no se sabe si los
+  // numeros son de un mes o de un ano, que es justo lo que hay que saber.
+  var cabecera = '<div class="mkt-fila mkt-cab">' +
+    '<div>' + esc(t("sug.cMarca")) + '</div>' +
+    '<div>' + esc(t("sug.cTransf")) + '</div>' +
+    '<div>' + esc(t("sug.cVar")) + '</div>' +
+    '<div>' + esc(t("sug.cCuota")) + '</div>' +
+  '</div>';
+
+  caja.innerHTML = cabecera + lista.map(function(x){
+    var ancho = Math.max(6, Math.round(x.a2026 / tope * 100));
+    var sube  = x.v > MERCADO_TOTAL.var;   // crece mas que el mercado
+
+    return '<div class="mkt-fila">' +
+      '<div class="mkt-m">' + esc(x.m) + "</div>" +
+      '<div class="mkt-b"><span style="width:' + ancho + '%"></span>' +
+        '<b>' + x.a2026.toLocaleString("es-PE") + "</b></div>" +
+      '<div class="mkt-v' + (sube ? " sube" : "") + '">' +
+        (x.v > 0 ? "+" : "") + x.v.toFixed(1) + "%</div>" +
+      '<div class="mkt-p">' + x.p.toFixed(1) + "%</div>" +
+    "</div>";
+  }).join("");
+
+  /* --- la lectura, que es lo que de verdad sirve --- */
+  if (pie) {
+    var mejor = lista.slice().sort(function(a, b){ return b.v - a.v; })[0];
+    pie.innerHTML =
+      '<span class="mkt-k">' + esc(t("sug.pie")) + "</span>" +
+      esc(t(SEGMENTO === "alta" ? "sug.leyalta" : "sug.leymedia")
+            .replace("{marca}", mejor ? mejor.m : "")
+            .replace("{v}", mejor ? mejor.v.toFixed(1) : "")
+            .replace("{total}", MERCADO_TOTAL.a2026.toLocaleString("es-PE"))
+            .replace("{mv}", MERCADO_TOTAL.var.toFixed(1)));
+  }
+}
 
 
 /* ============ LA PREGUNTA DEL PRESUPUESTO ============
