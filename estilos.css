@@ -617,3 +617,221 @@ footer{border-top:1px solid var(--hair);background:#06070A;padding-block:42px 30
   .camino-q{max-width:none}
   .via{padding:22px}
 }
+
+
+/* ============ casos de broker ============
+   Tres columnas: quien, que buscaba, que se le consiguio. La ultima
+   lleva fondo propio porque es la que cierra el argumento. */
+.brk{display:flex;flex-direction:column;gap:10px;margin-top:26px}
+.caso-brk{
+  display:grid;
+  grid-template-columns:120px minmax(0,1fr) minmax(0,1.25fr);
+  gap:0;
+  background:var(--panel);
+  border:1px solid var(--hair);
+  border-radius:10px;
+  overflow:hidden;
+}
+.brk-n{
+  padding:20px 18px;
+  font-family:var(--display);
+  font-size:17px;
+  font-weight:700;
+  border-right:1px solid var(--hair);
+  display:flex;
+  align-items:center;
+}
+.brk-b,.brk-e{padding:18px 20px}
+.brk-e{background:var(--brand-dim);border-left:2px solid var(--brand-hot)}
+.brk-k{
+  display:block;
+  font-family:var(--mono);
+  font-size:9px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--dim);
+  margin-bottom:6px;
+}
+.caso-brk p{margin:0;font-size:13.5px;line-height:1.55;color:var(--text)}
+.brk-b p{color:var(--dim)}
+.brk-d{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  margin-top:10px;
+  font-size:12.5px;
+  font-weight:600;
+  color:var(--brand-hot);
+}
+@media(max-width:760px){
+  .caso-brk{grid-template-columns:1fr}
+  .brk-n{border-right:0;border-bottom:1px solid var(--hair);padding:14px 18px}
+  .brk-e{border-left:0;border-top:2px solid var(--brand-hot)}
+}
+
+
+/* ============ la bifurcacion como primera pantalla ============
+   Al no haber hero, esto es lo primero que se ve. Necesita respirar
+   arriba y la pregunta tiene que pesar como titular. */
+#camino.primero{
+  padding-top:clamp(46px,7vw,86px);
+  padding-bottom:clamp(34px,4vw,52px);
+  border-bottom:1px solid var(--hair);
+}
+#camino.primero .camino-q{
+  font-size:clamp(26px,4vw,44px);
+  line-height:1.18;
+  max-width:19ch;
+  margin-bottom:30px;
+}
+#camino.primero .via h3{font-size:22px}
+#camino.primero .via p{font-size:14.5px}
+#camino.primero .trust{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+  margin-top:26px;
+  padding-top:22px;
+  border-top:1px solid var(--hair);
+}
+@media(max-width:760px){
+  #camino.primero .trust{grid-template-columns:1fr;gap:12px}
+  #camino.primero .camino-q{max-width:none}
+}
+
+
+/* ============ los dos caminos ============
+   Antes de elegir solo se ve la pregunta. Al elegir, se despliega ese
+   recorrido y se esconde el otro. */
+body.sin-via [data-via]{display:none}
+body.via-peritaje [data-via="broker"]{display:none}
+body.via-broker   [data-via="peritaje"]{display:none}
+
+/* La tarjeta del camino que ya se eligio queda marcada */
+body.via-peritaje .via[href="#peritaje"],
+body.via-broker   .via[href="#broker"]{
+  border-color:var(--brand-hot);
+  background:var(--brand-dim);
+}
+
+/* Ofrecer el otro camino, al final del elegido */
+#otroCamino{padding-block:clamp(26px,3vw,40px)}
+.otra-via{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  background:var(--panel);
+  border:1px dashed var(--line);
+  border-radius:10px;
+  padding:20px 24px;
+  text-decoration:none;
+  transition:border-color .18s;
+}
+.otra-via:hover{border-color:var(--brand-hot)}
+.otra-k{
+  font-family:var(--mono);
+  font-size:9.5px;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  color:var(--dim);
+}
+.otra-t{font-size:15px;font-weight:600;color:var(--brand-hot)}
+
+
+/* ============ la pregunta del presupuesto ============ */
+.rangos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:24px}
+.rango{
+  background:var(--panel);
+  border:1px solid var(--hair);
+  border-radius:10px;
+  padding:20px 18px;
+  color:var(--text);
+  font-family:var(--body);
+  font-size:15.5px;
+  font-weight:600;
+  cursor:pointer;
+  transition:border-color .18s,background .18s,transform .18s;
+}
+.rango:hover{border-color:var(--line);transform:translateY(-2px)}
+.rango.on{border-color:var(--brand-hot);background:var(--brand-dim);color:#fff}
+
+.pre-res{margin-top:22px}
+.pre-cifra{
+  background:var(--brand-dim);
+  border:1px solid var(--brand-hot);
+  border-radius:10px;
+  padding:22px 24px;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.pre-cifra b{font-family:var(--display);font-size:clamp(30px,4vw,44px);line-height:1;color:#fff}
+.pre-k{
+  font-family:var(--mono);
+  font-size:9.5px;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  color:var(--dim);
+}
+.pre-dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.pre-op{
+  background:var(--panel);
+  border:1px solid var(--hair);
+  border-radius:10px;
+  padding:18px 20px;
+}
+.pre-op.alt{border-style:dashed}
+.pre-op p{margin:6px 0 0;font-size:13.5px;line-height:1.6;color:var(--dim)}
+.pre-cta{margin-top:16px}
+.pre-t{font-size:15px;color:var(--dim);margin:0}
+
+@media(max-width:720px){
+  .rangos{grid-template-columns:1fr}
+  .pre-dos{grid-template-columns:1fr}
+}
+
+
+/* Rango sin casos cerrados: se dice y se ofrece hablar */
+.pre-vacio{
+  background:var(--panel);
+  border:1px dashed var(--line);
+  border-radius:10px;
+  padding:22px 24px;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:14px;
+}
+.pre-vacio p{margin:0;font-size:14.5px;line-height:1.65;color:var(--dim);max-width:62ch}
+
+
+/* Aviso cuando el presupuesto queda por debajo de lo que cubre el broker */
+.pre-aviso{
+  background:var(--panel);
+  border-left:2px solid #FBBF24;
+  border-radius:0 8px 8px 0;
+  padding:14px 18px;
+  margin:0 0 14px;
+  font-size:13.5px;
+  line-height:1.6;
+  color:var(--dim);
+  max-width:70ch;
+}
+
+
+/* Marca del caso mas parecido al presupuesto que respondio */
+.brk-n{flex-direction:column;align-items:flex-start;gap:6px}
+.brk-sim{
+  font-family:var(--mono);
+  font-size:8.5px;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  color:var(--brand-hot);
+  background:var(--brand-dim);
+  border:1px solid var(--brand-hot);
+  border-radius:999px;
+  padding:3px 8px;
+  line-height:1.3;
+  white-space:nowrap;
+}
+

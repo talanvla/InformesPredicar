@@ -132,7 +132,10 @@ async function cargarServicios(){
     var r = await db.from("services").select("*");
     if (r.error) throw r.error;
     var lista = r.data || [];
-    lista.sort(function(a,b){ return (a.orden||0) - (b.orden||0); });
+    // La tabla no tiene columna de orden, asi que se ordena por id: los
+    // ids estan puestos de menor a mayor precio. Sin esto el desplegable
+    // arrancaba en el servicio de 690 en vez del mas barato.
+    lista.sort(function(a, b){ return (a.orden || a.id) - (b.orden || b.id); });
     sel.innerHTML = lista.map(function(s){
       return '<option value="'+s.id+'">'+esc(s.name)+'</option>';
     }).join("");

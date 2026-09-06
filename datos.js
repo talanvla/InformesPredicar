@@ -4,15 +4,15 @@
 
 var IG = "https://www.instagram.com/predicar.pe/";
 var REELS = [
-{u:"https://www.instagram.com/predicar.pe/reel/DbwSxUMA2_M/",k:["Broker","Broker","Broker"],t:["Luis · BMW 320i 2023, único dueño","Luis · BMW 320i 2023, one owner","Luis · BMW 320i 2023, ein Vorbesitzer"],v:"caso-01.mp4"},
-{u:"https://www.instagram.com/predicar.pe/reel/DcUlHUUg8_U/",k:["Caso","Case","Fall"],t:["Chevrolet Tahoe 85 000 km: ¿negociar o descartar?","Chevrolet Tahoe 85,000 km: negotiate or walk?","Chevrolet Tahoe 85.000 km: verhandeln oder gehen?"],v:"caso-02.mp4"},
-{u:"https://www.instagram.com/predicar.pe/reel/DchXcNzAU79/",k:["Advertencia","Warning","Warnung"],t:["Lo que nadie revisa te cuesta más de S/ 6 000","What nobody checks costs you over S/ 6,000","Was niemand prüft, kostet über 6.000 S/"],v:"caso-03.mp4"},
-{u:"https://www.instagram.com/predicar.pe/reel/DcXHkeYgQ1B/",k:["Criterio","Criteria","Kriterium"],t:["Lo barato sale caro en reparaciones y gasolina","Cheap ends up costly in repairs and fuel","Billig wird teuer bei Reparatur und Sprit"],v:"caso-04.mp4"},
-{u:"https://www.instagram.com/predicar.pe/reel/DcW3Y2GAMtw/",k:["Ahorro","Savings","Ersparnis"],t:["S/ 600 en combustible, S/ 3 000 en reparaciones","S/ 600 in fuel, S/ 3,000 in repairs","600 S/ Sprit, 3.000 S/ Reparaturen"],v:"caso-05.mp4"},
-{u:"https://www.instagram.com/predicar.pe/reel/DcWzjc1ABKa/",k:["Escáner","Scanner","Scanner"],t:["Lo que se puede hacer con el escáner","What the scanner can actually do","Was der Scanner wirklich kann"],v:"caso-06.mp4"},
-{u:"https://www.instagram.com/predicar.pe/reel/DbMFjLeABe5/",k:["Broker","Broker","Broker"],t:["Camioneta de alta gama para empresarios","Premium SUV for business owners","Premium-SUV für Unternehmer"],v:"caso-07.mp4"},
-{u:"https://www.instagram.com/predicar.pe/reel/DcwEF2YgmBf/",k:["Broker","Broker","Broker"],t:["Auto de alta gama en menos de una semana","A premium car in under a week","Premiumauto in unter einer Woche"],v:"caso-08.mp4"},
-{u:"https://www.instagram.com/predicar.pe/reel/Dcg2DCqgBgJ/",k:["Asesoría","Consult","Beratung"],t:["Lo que nadie te dice y afecta tu bolsillo","What nobody tells you — and it costs you","Was dir niemand sagt — und dich Geld kostet"],v:"caso-09.mp4"}
+{via:"broker",u:"https://www.instagram.com/predicar.pe/reel/DbwSxUMA2_M/",k:["Broker","Broker","Broker"],t:["Luis · BMW 320i 2023, único dueño","Luis · BMW 320i 2023, one owner","Luis · BMW 320i 2023, ein Vorbesitzer"],v:"caso-01.mp4"},
+{via:"peritaje",u:"https://www.instagram.com/predicar.pe/reel/DcUlHUUg8_U/",k:["Caso","Case","Fall"],t:["Chevrolet Tahoe 85 000 km: ¿negociar o descartar?","Chevrolet Tahoe 85,000 km: negotiate or walk?","Chevrolet Tahoe 85.000 km: verhandeln oder gehen?"],v:"caso-02.mp4"},
+{via:"peritaje",u:"https://www.instagram.com/predicar.pe/reel/DchXcNzAU79/",k:["Advertencia","Warning","Warnung"],t:["Lo que nadie revisa te cuesta más de S/ 6 000","What nobody checks costs you over S/ 6,000","Was niemand prüft, kostet über 6.000 S/"],v:"caso-03.mp4"},
+{via:"peritaje",u:"https://www.instagram.com/predicar.pe/reel/DcXHkeYgQ1B/",k:["Criterio","Criteria","Kriterium"],t:["Lo barato sale caro en reparaciones y gasolina","Cheap ends up costly in repairs and fuel","Billig wird teuer bei Reparatur und Sprit"],v:"caso-04.mp4"},
+{via:"peritaje",u:"https://www.instagram.com/predicar.pe/reel/DcW3Y2GAMtw/",k:["Ahorro","Savings","Ersparnis"],t:["S/ 600 en combustible, S/ 3 000 en reparaciones","S/ 600 in fuel, S/ 3,000 in repairs","600 S/ Sprit, 3.000 S/ Reparaturen"],v:"caso-05.mp4"},
+{via:"peritaje",u:"https://www.instagram.com/predicar.pe/reel/DcWzjc1ABKa/",k:["Escáner","Scanner","Scanner"],t:["Lo que se puede hacer con el escáner","What the scanner can actually do","Was der Scanner wirklich kann"],v:"caso-06.mp4"},
+{via:"broker",u:"https://www.instagram.com/predicar.pe/reel/DbMFjLeABe5/",k:["Broker","Broker","Broker"],t:["Camioneta de alta gama para empresarios","Premium SUV for business owners","Premium-SUV für Unternehmer"],v:"caso-07.mp4"},
+{via:"broker",u:"https://www.instagram.com/predicar.pe/reel/DcwEF2YgmBf/",k:["Broker","Broker","Broker"],t:["Auto de alta gama en menos de una semana","A premium car in under a week","Premiumauto in unter einer Woche"],v:"caso-08.mp4"},
+{via:"peritaje",u:"https://www.instagram.com/predicar.pe/reel/Dcg2DCqgBgJ/",k:["Asesoría","Consult","Beratung"],t:["Lo que nadie te dice y afecta tu bolsillo","What nobody tells you — and it costs you","Was dir niemand sagt — und dich Geld kostet"],v:"caso-09.mp4"}
 ];
 
 var PAGES = ["img-02.jpg","img-03.jpg","img-04.jpg","img-05.jpg","img-06.jpg","img-07.jpg","img-08.jpg","img-09.jpg","img-10.jpg","img-11.jpg","img-12.jpg"];
@@ -153,7 +153,7 @@ var SAVES = [
 ];
 
 var PLANS = [
- {feat:1, tag:["Punto de partida","Entry point","Einstieg"], n:["Asesoría personalizada","Personal consult","Persönliche Beratung"], p:"65",
+ {feat:1, via:"peritaje", tag:["Punto de partida","Entry point","Einstieg"], n:["Asesoría personalizada","Personal consult","Persönliche Beratung"], p:"65",
   s:["30 minutos · videollamada","30 minutes · video call","30 Minuten · Videocall"],
   w:["Tienen dudas y quieren orientarse antes de empezar a buscar.","You have doubts and want direction before starting the search.","Du bist unsicher und willst vor der Suche Orientierung."],
   f:[["Definimos qué auto te conviene según tu uso real","We define which car fits your real use","Wir klären, welches Auto zu deiner Nutzung passt"],
@@ -161,7 +161,7 @@ var PLANS = [
      ["Costo real de tener ese auto en Lima","True cost of owning that car in Lima","Reale Haltungskosten in Lima"],
      ["Cómo buscar y qué anuncios descartar","How to search and which ads to skip","Wie du suchst und welche Anzeigen du überspringst"]]},
 
- {feat:0, tag:["Inspección vehicular","Core service","Kernleistung"], n:["Peritaje automotriz","Vehicle inspection","Fahrzeuggutachten"], p:"120",
+ {feat:0, via:"peritaje", tag:["Inspección vehicular","Core service","Kernleistung"], n:["Peritaje automotriz","Vehicle inspection","Fahrzeuggutachten"], p:"120",
   s:["Un vehículo · a domicilio","One vehicle · at your location","Ein Fahrzeug · vor Ort"],
   w:["Ya tienen un auto en mente y quieren comprar con seguridad.","You already have a car in mind and want to buy safely.","Du hast ein Auto im Blick und willst sicher kaufen."],
   f:[["Inspección mecánica, estructural y electrónica","Mechanical, structural and electronic inspection","Mechanische, strukturelle und elektronische Prüfung"],
@@ -171,7 +171,7 @@ var PLANS = [
      ["Plan de mantenimiento posterior a la compra","Post-purchase maintenance plan","Wartungsplan nach dem Kauf"],
      ["Asesoría previa incluida","Prior consult included","Vorberatung inklusive"]]},
 
- {feat:0, tag:["Llave en mano","Turnkey","Schlüsselfertig"], n:["Broker vehicular","Car sourcing","Fahrzeugsuche"], p:"690",
+ {feat:0, via:"broker", tag:["Llave en mano","Turnkey","Schlüsselfertig"], n:["Broker vehicular","Car sourcing","Fahrzeugsuche"], p:"690",
   s:["Vehículos de USD 20 000 a 60 000","Vehicles from USD 20,000 to 60,000","Fahrzeuge von 20.000 bis 60.000 USD"],
   w:["Están buscando un auto y quieren encontrarlo en 3 a 6 semanas.","You're looking for a car and want it found in 3 to 6 weeks.","Du suchst ein Auto und willst es in 3 bis 6 Wochen finden."],
   f:[["Búsqueda y filtrado de opciones por ti","We search and shortlist for you","Wir suchen und filtern für dich"],
@@ -180,7 +180,7 @@ var PLANS = [
      ["Acompañamiento a notaría para la transferencia","We accompany you to the notary","Begleitung zum Notar"],
      ["Asesoría postventa y plan de mantenimiento","Post-sale advice and maintenance plan","Nachbetreuung und Wartungsplan"]]},
 
- {feat:0, tag:["Alta gama","Premium","Premium"], n:["Broker premium","Premium sourcing","Premium-Suche"], p:"990",
+ {feat:0, via:"broker", tag:["Alta gama","Premium","Premium"], n:["Broker premium","Premium sourcing","Premium-Suche"], p:"990",
   s:["Vehículos de más de USD 60 000","Vehicles above USD 60,000","Fahrzeuge über 60.000 USD"],
   w:["Buscan un vehículo de alta gama, en poco tiempo y sin exponerse a una estafa.","You want a premium vehicle, fast, without exposure to a scam.","Du willst schnell ein Premiumfahrzeug — ohne Betrugsrisiko."],
   f:[["Todo lo incluido en el broker vehicular","Everything in car sourcing","Alles aus der Fahrzeugsuche"],
@@ -224,6 +224,80 @@ function celda(v){
   if (v === 1) return CHK;
   return '<span class="txt">' + esc(v[L]) + '</span>';
 }
+/* Casos de broker vehicular. Cada fila: que buscaba el cliente, que le
+   consegui, y el dato que resume por que valio la pena.
+   Los nombres son reales; el resto sale de lo que se cerro. */
+var BROKER = [
+ {n:"Melissa",pr:3,
+  b:["Camioneta del 2022, hasta USD 40 000",
+     "An SUV from 2022, up to USD 40,000",
+     "SUV ab 2022, bis 40.000 USD"],
+  e:["Subaru Evoltis 2023 con 20 000 km, cerrada en USD 36 800",
+     "A 2023 Subaru Evoltis with 20,000 km, closed at USD 36,800",
+     "Subaru Evoltis 2023 mit 20.000 km, abgeschlossen für 36.800 USD"],
+  d:["USD 3 200 bajo mercado","USD 3,200 below market","3.200 USD unter Marktwert"]},
+
+ {n:"Diego",pr:2,
+  b:["Camioneta del 2016 en adelante con USD 18 500, para viajar en familia",
+     "An SUV from 2016 on, USD 18,500, to travel with the family",
+     "SUV ab 2016, 18.500 USD, für Familienreisen"],
+  e:["Volkswagen Tiguan 2018 con 55 000 km y tres filas de asientos",
+     "A 2018 Volkswagen Tiguan with 55,000 km and three rows of seats",
+     "VW Tiguan 2018 mit 55.000 km und drei Sitzreihen"],
+  d:["Tres filas dentro del presupuesto","Three rows within budget","Drei Reihen im Budget"]},
+
+ {n:"Juan Pablo",pr:2,
+  b:["Honda o Mazda del 2018 en adelante. Venía de intentos de estafa y de un vendedor que se echó atrás",
+     "A Honda or Mazda from 2018 on. He came from attempted scams and a seller who backed out",
+     "Honda oder Mazda ab 2018. Er kam von Betrugsversuchen und einem Verkäufer, der absprang"],
+  e:["Honda CR-V 2018, con el estado mecánico y legal verificado y el plan de mantenimiento posterior",
+     "A 2018 Honda CR-V, with the mechanical and legal status verified and a maintenance plan for after",
+     "Honda CR-V 2018, mechanisch und rechtlich geprüft, mit Wartungsplan danach"],
+  d:["Compró sin exponerse","Bought without exposure","Kaufte ohne Risiko"]},
+
+ {n:"Sebastián",pr:3,
+  b:["Camioneta de alta gama para reunirse con clientes importantes",
+     "A premium SUV for meetings with important clients",
+     "Premium-SUV für Treffen mit wichtigen Kunden"],
+  e:["Mercedes-Benz GLC 200 del 2023 con solo 7 000 km",
+     "A 2023 Mercedes-Benz GLC 200 with just 7,000 km",
+     "Mercedes-Benz GLC 200 von 2023 mit nur 7.000 km"],
+  d:["Prácticamente nuevo","Practically new","Praktisch neu"]},
+
+ {n:"Luis",pr:2,
+  b:["Su primer auto de alta gama, con buena aceleración y comodidad, por menos de USD 30 000",
+     "His first premium car, with good acceleration and comfort, under USD 30,000",
+     "Sein erstes Premiumauto, gute Beschleunigung und Komfort, unter 30.000 USD"],
+  e:["BMW 320 del 2023 con solo 21 000 km",
+     "A 2023 BMW 320 with just 21,000 km",
+     "BMW 320 von 2023 mit nur 21.000 km"],
+  d:["Sin perder tiempo ni arriesgarse","No time lost, no risk taken","Keine Zeit verloren, kein Risiko"]},
+
+ {n:"Anthony",pr:2,
+  b:["Una SUV en buen estado y estéticamente llamativa, por USD 20 000",
+     "An SUV in good shape and good looking, for USD 20,000",
+     "Ein SUV in gutem Zustand und mit Auftritt, für 20.000 USD"],
+  e:["Mazda CX-30 con menos de 60 000 km, en excelentes condiciones",
+     "A Mazda CX-30 with under 60,000 km, in excellent condition",
+     "Mazda CX-30 mit unter 60.000 km, in ausgezeichnetem Zustand"],
+  d:["Dentro del presupuesto exacto","Exactly on budget","Genau im Budget"]}
+];
+
+/* Los tres rangos de presupuesto y lo que se ha llegado a negociar en
+   cada uno. Se hicieron contiguos para que ningun cliente quede fuera:
+   entre 20 y 30 mil caian dos casos reales que antes no encajaban. */
+/* Los rangos de presupuesto del peritaje y lo que se ha llegado a
+   negociar en cada uno. Se hicieron contiguos para que ningun cliente
+   quede fuera: entre 20 y 30 mil caian casos que antes no encajaban.
+
+   En broker no se pregunta el presupuesto: se muestran los seis casos. */
+var RANGOS = [
+ {id:1, e:"Menos de USD 10 000", en:"Under USD 10,000",     de:"Unter 10.000 USD",      neg:"1 500"},
+ {id:2, e:"USD 10 000 a 30 000", en:"USD 10,000 to 30,000", de:"10.000 bis 30.000 USD", neg:"4 000"},
+ {id:3, e:"Más de USD 30 000",  en:"Over USD 30,000",      de:"Über 30.000 USD",      neg:"6 000"}
+];
+
+
 var STAR = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="flex:none;margin-right:7px;vertical-align:-1px"><path d="M8 1.4l1.9 4 4.3.6-3.1 3 .74 4.3L8 11.3l-3.84 2-.74-4.3-3.1-3 4.3-.6z" fill="#FFC94A"/></svg>';
 var CHKG = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2.5 7.4l3 3 6-6.6" stroke="#4A85FF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 var esc = function(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); };

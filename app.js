@@ -25,7 +25,10 @@ function render(){
     if (v.indexOf("<") >= 0) el.innerHTML = v; else el.textContent = v;
   });
 
-  document.getElementById("reelsGrid").innerHTML = REELS.map(function(r){
+  document.getElementById("reelsGrid").innerHTML = REELS.filter(function(r){
+    // sin camino elegido se muestran todos; con camino, solo los suyos
+    return !VIA || r.via === VIA;
+  }).map(function(r){
     return '<a class="reel" href="'+r.u+'" target="_blank" rel="noopener">'+
       '<video src="'+r.v+'" autoplay muted loop playsinline preload="auto" aria-label="'+esc(r.t[L])+'"></video>'+
       '<span class="pl"><svg width="11" height="13" viewBox="0 0 16 18" fill="#fff" aria-hidden="true"><path d="M15 9L1 17.7V.3L15 9z"/></svg></span>'+
@@ -82,6 +85,8 @@ function render(){
     return '<div class="save"><div class="k">'+esc(s.k[L])+'</div><div class="v">'+esc(s.v)+'</div><div class="d">'+esc(s.d[L])+'</div></div>';
   }).join("");
 
+    // Servicios muestra siempre los cuatro: quien vino por un peritaje
+  // tiene que poder ver que tambien existe el broker, y al reves.
   document.getElementById("planesGrid").innerHTML = PLANS.map(function(p){
     return '<article class="plan'+(p.feat?' feat':'')+'"><div class="plan-head"><p class="plan-tag">'+esc(p.tag[L])+
       '</p><h3>'+esc(p.n[L])+'</h3><div class="price"><b>'+p.p+'</b><span>USD</span></div><p class="plan-scope">'+esc(p.s[L])+
@@ -96,6 +101,35 @@ function render(){
   document.getElementById("paysGrid").innerHTML = PAYS.map(function(p){
     return '<div class="pay"><div class="k">'+esc(p.k[L])+'</div><h3>'+esc(p.t[L])+'</h3><p>'+esc(p.p[L])+
       '</p><div class="methods">'+p.m.map(function(m){ return '<span class="m">'+esc(m)+'</span>'; }).join("")+'</div></div>';
+  }).join("");
+
+  // El titular de los videos cambia: en broker no son peritajes
+  var tituloCasos = document.querySelector("#casos h2");
+  if (tituloCasos) tituloCasos.textContent = t(VIA === "broker" ? "casos.h2brk" : "casos.h2");
+  var subCasos = document.querySelector("#casos .sec-head > p:last-of-type");
+  if (subCasos) subCasos.textContent = t(VIA === "broker" ? "casos.subbrk" : "casos.sub");
+
+  pintarRangos();
+
+  var brk = document.getElementById("brokerGrid");
+    // Con presupuesto elegido, los casos parecidos van primero y marcados.
+  // No se esconde ninguno: los demas siguen abajo, que tambien venden.
+  var lista = BROKER.slice();
+  if (RANGO) lista.sort(function(a, b){
+    return (b.pr === RANGO ? 1 : 0) - (a.pr === RANGO ? 1 : 0);
+  });
+
+  if (brk) brk.innerHTML = lista.map(function(c){
+    return '<article class="caso-brk">' +
+      '<div class="brk-n">' + esc(c.n) +
+        (RANGO && c.pr === RANGO ? '<span class="brk-sim">' + esc(t("pre.sim")) + '</span>' : '') +
+      '</div>' +
+      '<div class="brk-b"><span class="brk-k">' + esc(t("brk.q")) + '</span>' +
+        '<p>' + esc(c.b[L]) + '</p></div>' +
+      '<div class="brk-e"><span class="brk-k">' + esc(t("brk.e")) + '</span>' +
+        '<p>' + esc(c.e[L]) + '</p>' +
+        '<span class="brk-d">' + CHKG + esc(c.d[L]) + '</span></div>' +
+    '</article>';
   }).join("");
 
   document.getElementById("autoList").innerHTML = AUTOS.map(function(a){
@@ -235,4 +269,216 @@ document.addEventListener("keydown", function(e){
       intentar(b);
     }
   });
+})();
+
+
+/* ============ LA PREGUNTA DEL PRESUPUESTO ============
+
+   Es el ultimo paso antes de agendar, y cierra distinto segun el camino:
+
+     peritaje -> cuanto se ha llegado a negociar en ese rango, y las dos
+                 salidas posibles: negociar o retirarse
+     broker   -> los casos reales cerrados dentro de ese presupuesto
+
+   Se guarda la respuesta en RANGO para que al cambiar de idioma o de
+   camino no haya que volver a preguntar.                            */
+
+
+function pintarRangos(){
+  var caja = document.getElementById("rangosGrid");
+  if (!caja) return;
+
+  caja.innerHTML = RANGOS.map(function(r){
+    var rotulo = L === 0 ? r.e : (L === 1 ? r.en : r.de);
+    return '<button type="button" class="rango' + (RANGO === r.id ? ' on' : '') +
+           '" data-rango="' + r.id + '">' + esc(rotulo) + '</button>';
+  }).join("");
+
+  caja.querySelectorAll(".rango").forEach(function(b){
+    b.addEventListener("click", function(){
+      elegirRango(parseInt(b.getAttribute("data-rango"), 10));
+    });
+  });
+}
+
+function elegirRango(id){
+  RANGO = id;
+  pintarRangos();
+  pintarResultado();
+
+  // Quien decide si la seccion de casos se ve es pintarResultado, que
+  // sabe cuantos hay. Forzarla aqui la mostraba vacia en el rango bajo.
+
+  bajarA(VIA === "broker" ? "broker" : "preResultado", 120);
+}
+
+function pintarResultado(){
+  var res = document.getElementById("preResultado");
+  if (!res) return;
+
+  if (!RANGO) { res.hidden = true; res.innerHTML = ""; return; }
+  res.hidden = false;
+
+  var r = RANGOS.filter(function(x){ return x.id === RANGO; })[0];
+  if (!r) return;
+
+  if (VIA === "broker") {
+    // En broker la respuesta son los casos: se dice cuantos coinciden y
+    // se ordenan arriba. Ninguno se esconde.
+    var iguales = BROKER.filter(function(c){ return c.pr === RANGO; }).length;
+    res.innerHTML = '<p class="pre-t">' +
+      esc(iguales ? t("pre.brk").replace("{n}", iguales) : t("pre.brk0")) + '</p>';
+    render();
+    return;
+  }
+
+  // peritaje: cuanto se ha negociado y las dos salidas
+  res.innerHTML =
+    '<div class="pre-cifra"><span class="pre-k">' + esc(t("pre.neg")) + '</span>' +
+      '<b>USD ' + esc(r.neg) + '</b></div>' +
+    '<div class="pre-dos">' +
+      '<div class="pre-op"><span class="pre-k">' + esc(t("pre.o1k")) + '</span>' +
+        '<p>' + esc(t("pre.o1")) + '</p></div>' +
+      '<div class="pre-op alt"><span class="pre-k">' + esc(t("pre.o2k")) + '</span>' +
+        '<p>' + esc(t("pre.o2")) + '</p></div>' +
+    '</div>' +
+    '<a class="btn btn-blue pre-cta" href="#agendar">' + esc(t("pre.cta")) + '</a>';
+}
+
+
+/* ============ LOS DOS CAMINOS ============
+
+   La pagina no muestra todo a la vez. El visitante elige si ya tiene el
+   auto o si todavia lo busca, y a partir de ahi solo ve lo suyo:
+
+     peritaje -> sus 6 videos, el informe de 11 paginas, la comparativa
+     broker   -> sus 3 videos y los 6 casos con nombre
+
+   Lo comun (respaldo, servicios, proceso, agendar) se ve en los dos.
+   Antes de elegir solo esta la pregunta: nadie pierde tiempo leyendo lo
+   que no le toca.
+
+   Quien filtra los reels y los planes es el propio render() de app.js,
+   mirando la variable VIA. Asi no hay dos versiones del mismo HTML.
+
+   La eleccion queda en la direccion (#peritaje / #broker) para poder
+   mandar el enlace ya abierto en un camino.                          */
+
+
+/* Bajar hasta una seccion.
+
+   scrollIntoView con smooth no siempre corre: si el elemento acaba de
+   dejar de estar oculto, o si el navegador ignora el desplazamiento
+   suave, se queda quieto. Aqui se calcula la posicion a mano y se
+   descuenta la barra de arriba, que es fija y taparia el titulo. */
+function bajarA(id, espera){
+  setTimeout(function(){
+    var destino = document.getElementById(id);
+    if (!destino) return;
+
+    var barra = document.querySelector(".nav");
+    var alto  = barra ? barra.offsetHeight : 0;
+    var desde = window.pageYOffset;
+    var hasta = destino.getBoundingClientRect().top + desde - alto - 8;
+    if (hasta < 0) hasta = 0;
+
+    // El desplazamiento suave del navegador no corre en todos lados, ni
+    // de forma consistente en el primer uso. Se anima a mano y punto: el
+    // CSS ya no lleva scroll-behavior para que nada compita.
+    var raiz = document.documentElement;
+
+    var quieto = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (quieto || !window.requestAnimationFrame) {
+      raiz.scrollTop = hasta;
+      return;
+    }
+
+    var inicio = null;
+    var dura = 420;
+    var arranco = false;
+
+    // Red de seguridad: si la animacion no arranca (pestana en segundo
+    // plano, navegador que no dispara requestAnimationFrame), se salta
+    // de golpe. Vale mas llegar sin suavidad que no llegar.
+    setTimeout(function(){
+      if (!arranco) raiz.scrollTop = hasta;
+    }, 260);
+
+    function paso(ahora){
+      arranco = true;
+      if (inicio === null) inicio = ahora;
+      var t = Math.min((ahora - inicio) / dura, 1);
+      var suave = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      raiz.scrollTop = desde + (hasta - desde) * suave;
+      if (t < 1) requestAnimationFrame(paso);
+    }
+    requestAnimationFrame(paso);
+
+  }, espera || 90);
+}
+
+function marcarVia(via){
+  VIA = via;
+  document.body.classList.toggle("via-peritaje", via === "peritaje");
+  document.body.classList.toggle("via-broker",   via === "broker");
+  document.body.classList.toggle("sin-via",      !via);
+
+  // cambiar de camino borra la respuesta anterior: el presupuesto
+  // significa cosas distintas en cada uno
+  RANGO = null;
+  var resu = document.getElementById("preResultado");
+  if (resu) { resu.hidden = true; resu.innerHTML = ""; }
+
+  var otro = document.getElementById("otroCamino");
+  if (otro) {
+    otro.hidden = !via;
+    var txt = document.getElementById("otraTexto");
+    if (txt && via) {
+      txt.textContent = via === "peritaje" ? t("via.abroker") : t("via.aperitaje");
+    }
+  }
+
+  render();   // vuelve a dibujar con los reels y planes del camino
+}
+
+/* Elegir camino: se despliega el recorrido y se baja a su primera prueba. */
+function elegirVia(via, saltar){
+  marcarVia(via);
+  if (history.replaceState) history.replaceState(null, "", "#" + via);
+
+  // Los dos caminos empiezan por los videos: es la prueba que engancha.
+  if (saltar !== false) bajarA("casos");
+}
+
+(function iniciarCaminos(){
+  // las dos tarjetas de la pregunta
+  document.querySelectorAll(".via[href^='#']").forEach(function(a){
+    a.addEventListener("click", function(e){
+      e.preventDefault();
+      elegirVia(a.getAttribute("href") === "#broker" ? "broker" : "peritaje");
+    });
+  });
+
+  // el enlace para probar el otro camino
+  var otro = document.getElementById("verOtro");
+  if (otro) otro.addEventListener("click", function(e){
+    e.preventDefault();
+    elegirVia(VIA === "peritaje" ? "broker" : "peritaje");
+  });
+
+  // el menu de arriba: si apunta a algo de un camino, lo abre
+  var deVia = { casos:"peritaje", informe:"peritaje", peritaje:"peritaje", broker:"broker" };
+  document.querySelectorAll("#navLinks a").forEach(function(a){
+    a.addEventListener("click", function(){
+      var id = (a.getAttribute("href") || "").replace("#", "");
+      var v = deVia[id];
+      if (v && v !== VIA) elegirVia(v, false);
+      else if (!VIA) marcarVia("peritaje");   // lo comun necesita un camino abierto
+    });
+  });
+
+  // si la direccion ya trae un camino, se abre solo
+  var h = (location.hash || "").replace("#", "");
+  if (h === "broker" || h === "peritaje") elegirVia(h, false);
+  else marcarVia(null);
 })();
