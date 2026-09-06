@@ -313,6 +313,7 @@ function pintarMercado(){
   var cabecera = '<div class="mkt-fila mkt-cab">' +
     '<div>' + esc(t("sug.cMarca")) + '</div>' +
     '<div>' + esc(t("sug.cTransf")) + '</div>' +
+    '<div>' + esc(t("sug.cProm")) + '</div>' +
     '<div>' + esc(t("sug.cVar")) + '</div>' +
     '<div>' + esc(t("sug.cCuota")) + '</div>' +
   '</div>';
@@ -325,6 +326,8 @@ function pintarMercado(){
       '<div class="mkt-m">' + esc(x.m) + "</div>" +
       '<div class="mkt-b"><span style="width:' + ancho + '%"></span>' +
         '<b>' + x.a2026.toLocaleString("es-PE") + "</b></div>" +
+      '<div class="mkt-mes">' +
+        Math.round(x.a2026 / MERCADO_TOTAL.meses).toLocaleString("es-PE") + "</div>" +
       '<div class="mkt-v' + (sube ? " sube" : "") + '">' +
         (x.v > 0 ? "+" : "") + x.v.toFixed(1) + "%</div>" +
       '<div class="mkt-p">' + x.p.toFixed(1) + "%</div>" +

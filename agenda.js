@@ -262,9 +262,9 @@ async function book(e){
       notes:        d.notas
     });
 
-    var r = await db.from("appointments").insert(conExtras).select().single();
+    var r = await db.from("appointments").insert(conExtras).select("id").single();
     if (r.error) {
-      r = await db.from("appointments").insert(fila).select().single();
+      r = await db.from("appointments").insert(fila).select("id").single();
       if (r.error) throw r.error;
     }
 

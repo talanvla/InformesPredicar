@@ -312,7 +312,10 @@ var RANGOS = [
    modelo, y las marcas de superlujo (Ferrari, Aston Martin, Porsche),
    que caen dentro de "Otros" y no se pueden separar.                  */
 
-var MERCADO_TOTAL = { a2025: 274690, a2026: 314296, var: 14.4 };
+// meses: cuantos lleva acumulados la cifra de 2026. De aqui sale el
+// promedio mensual, y el dia que la AAP publique julio basta con
+// cambiar este numero y los totales.
+var MERCADO_TOTAL = { a2025: 274690, a2026: 314296, var: 14.4, meses: 6 };
 
 var MERCADO = {
   alta: [
