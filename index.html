@@ -1,33 +1,363 @@
-<!DOCTYPE html>
-<html lang="es">
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<meta name="description" content="Peritaje e inspección vehicular en Lima. Ingeniero mecatrónico con más de 7 años en diseño y calidad automotriz. Entérate lo que compras antes de pagar.">
+<meta name="theme-color" content="#08090C">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Predicar Automotive — Peritaje vehicular en Lima">
+<meta property="og:description" content="Antes de comprar ese auto, que lo revise un ingeniero. Más de 300 casos, rango negociado por caso entre 500 y 6400 dólares.">
+<meta property="og:image" content="img-01.png">
+<meta name="twitter:card" content="summary_large_image">
+<title>Predicar Automotive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Barlow:wght@200;300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap">
 
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Predicar Automotive Perú SAC</title>
-
-<link rel="stylesheet" href="style.css">
-
-</head>
-
-<body>
-
-<div id="app"></div>
+<link rel="stylesheet" href="estilos.css">
+<!-- simulador de /api retirado: ahora las peticiones van al servidor real -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="predicar-car" viewBox="0 0 100 71.0"><path fill="currentColor" fill-rule="evenodd" d="M46.8 0.1L45.9 0.2L44.9 0.2L43.9 0.3L42.9 0.3L41.9 0.3L40.9 0.3L39.9 0.3L38.9 0.4L37.9 0.5L36.9 0.6L36.0 0.7L35.0 0.8L34.0 0.9L33.1 0.9L32.1 1.0L31.2 1.1L30.2 1.2L29.3 1.4L28.3 1.6L27.4 1.9L26.6 2.2L25.8 2.7L25.0 3.3L24.4 4.1L23.8 4.8L23.3 5.6L22.8 6.4L22.3 7.2L21.8 8.1L21.3 8.9L20.9 9.7L20.4 10.5L20.0 11.3L19.5 12.2L19.1 13.0L18.6 13.8L18.2 14.7L17.8 15.5L17.2 16.2L16.5 16.6L15.6 16.7L14.6 16.8L13.6 16.8L12.5 16.8L11.5 16.8L10.5 16.8L9.6 17.0L8.9 17.6L8.5 18.4L8.5 19.3L8.9 20.1L9.6 20.6L10.5 20.7L11.5 20.8L12.5 20.8L13.4 20.9L13.9 21.2L13.5 21.5L12.6 21.6L11.7 21.8L10.7 21.9L9.8 22.1L8.9 22.3L8.0 22.6L7.2 23.2L6.5 23.8L5.9 24.6L5.4 25.4L4.8 26.1L4.1 26.7L3.3 27.2L2.5 27.8L1.9 28.5L1.3 29.3L0.9 30.1L0.7 31.0L0.5 31.9L0.3 32.9L0.2 33.8L0.1 34.8L0.1 35.8L0.1 36.8L0.1 37.8L0.1 38.9L0.1 39.9L0.1 40.9L0.1 41.9L0.1 42.9L0.1 43.9L0.1 44.9L0.1 45.9L0.1 46.9L0.1 48.0L0.1 49.0L0.1 50.0L0.2 50.9L0.3 51.9L0.4 52.9L0.4 53.8L0.3 54.8L0.1 55.7L0.0 56.7L0.0 57.7L0.0 58.7L0.1 59.7L0.1 60.7L0.1 61.7L0.1 62.7L0.1 63.7L0.1 64.7L0.1 65.7L0.3 66.7L0.6 67.6L1.0 68.4L1.6 69.1L2.3 69.7L3.1 70.2L4.0 70.6L4.9 70.9L5.9 71.0L6.9 71.0L7.9 71.0L8.9 71.0L9.9 71.0L10.9 71.0L12.0 71.0L13.0 71.0L13.9 71.0L14.9 71.0L15.9 70.9L16.8 70.7L17.7 70.3L18.5 69.8L19.2 69.2L19.8 68.4L20.2 67.6L20.6 66.7L20.8 65.8L20.9 64.8L20.9 63.9L21.1 63.0L21.6 62.5L22.5 62.3L23.5 62.4L24.5 62.4L25.5 62.4L26.5 62.4L27.5 62.4L28.5 62.4L29.5 62.4L30.5 62.4L31.5 62.4L32.6 62.4L33.6 62.4L34.6 62.4L35.6 62.4L36.6 62.4L37.6 62.4L38.6 62.4L39.6 62.4L40.6 62.4L41.7 62.4L42.7 62.4L43.7 62.4L44.7 62.4L45.7 62.4L46.7 62.4L47.7 62.4L48.7 62.4L49.8 62.4L50.8 62.4L51.8 62.4L52.8 62.4L53.8 62.4L54.8 62.4L55.8 62.4L56.8 62.4L57.9 62.4L58.9 62.4L59.9 62.4L60.9 62.4L61.9 62.4L62.9 62.4L63.9 62.4L64.9 62.4L65.9 62.4L67.0 62.4L68.0 62.4L69.0 62.4L70.0 62.4L71.0 62.4L72.0 62.4L73.0 62.4L74.0 62.4L75.0 62.4L76.0 62.3L77.0 62.3L77.9 62.2L78.7 62.4L79.0 63.1L79.1 64.1L79.2 65.1L79.3 66.0L79.5 66.9L79.9 67.8L80.4 68.6L81.0 69.3L81.7 69.9L82.5 70.4L83.4 70.7L84.3 70.9L85.3 71.0L86.3 71.0L87.3 71.0L88.3 71.0L89.3 71.0L90.3 71.0L91.3 71.0L92.3 71.0L93.3 71.0L94.3 70.9L95.3 70.7L96.2 70.5L97.0 70.1L97.8 69.6L98.5 68.9L99.1 68.2L99.5 67.4L99.8 66.5L100.0 65.5L100.0 64.5L100.0 63.5L100.0 62.5L100.0 61.5L100.0 60.5L100.0 59.4L100.0 58.4L100.0 57.4L100.0 56.4L99.8 55.5L99.7 54.5L99.6 53.6L99.6 52.6L99.8 51.6L99.9 50.7L100.0 49.7L100.0 48.7L99.9 47.7L99.9 46.7L99.9 45.7L99.9 44.7L99.9 43.7L99.9 42.7L100.0 41.7L100.0 40.7L100.0 39.7L100.0 38.7L100.0 37.7L100.0 36.7L100.0 35.7L99.9 34.7L99.7 33.7L99.6 32.8L99.4 31.8L99.2 30.9L98.9 30.0L98.5 29.2L97.9 28.4L97.3 27.8L96.5 27.3L95.7 26.8L95.0 26.2L94.4 25.4L94.0 24.6L93.5 23.8L92.8 23.2L92.0 22.7L91.1 22.4L90.2 22.2L89.2 22.0L88.3 21.9L87.3 21.7L86.5 21.5L86.4 21.1L87.1 20.9L88.0 20.8L89.0 20.8L90.0 20.7L90.9 20.5L91.6 19.9L91.9 19.1L91.7 18.2L91.3 17.5L90.5 17.0L89.6 16.8L88.6 16.8L87.6 16.8L86.5 16.8L85.5 16.8L84.5 16.8L83.6 16.7L82.9 16.3L82.4 15.5L81.9 14.7L81.5 13.9L81.1 13.0L80.7 12.2L80.2 11.4L79.7 10.6L79.2 9.8L78.8 8.9L78.3 8.1L77.8 7.3L77.3 6.5L76.9 5.7L76.3 4.9L75.7 4.1L75.1 3.4L74.4 2.8L73.6 2.3L72.7 1.9L71.8 1.6L70.9 1.4L69.9 1.3L69.0 1.2L68.0 1.1L67.0 1.0L66.0 0.9L65.1 0.8L64.1 0.6L63.1 0.6L62.2 0.5L61.2 0.4L60.2 0.3L59.3 0.2L58.3 0.2L57.3 0.2L56.3 0.2L55.3 0.2L54.3 0.2L53.3 0.2L52.4 0.1L51.4 0.0L50.4 0.0L49.4 0.0L48.3 0.0L47.3 0.0Z M5.1 38.3L5.9 38.1L6.9 38.2L7.8 38.3L8.8 38.4L9.8 38.5L10.8 38.6L11.7 38.8L12.6 39.0L13.6 39.0L14.6 39.1L15.5 39.3L16.5 39.5L17.5 39.5L18.5 39.5L19.4 39.6L20.4 39.8L21.3 39.9L22.3 39.9L23.2 40.1L23.9 40.7L24.3 41.5L24.5 42.4L24.7 43.4L24.7 44.3L24.2 44.9L23.4 44.9L22.4 44.8L21.4 44.8L20.4 44.7L19.4 44.7L18.4 44.7L17.4 44.6L16.5 44.4L15.5 44.4L14.5 44.3L13.5 44.3L12.5 44.3L11.6 44.2L10.6 44.0L9.6 44.0L8.6 44.0L7.6 43.9L6.6 43.8L5.7 43.6L4.9 43.4L4.4 42.7L4.4 41.8L4.5 40.8L4.5 39.9L4.7 39.0Z M93.7 38.0L94.6 38.1L95.3 38.5L95.6 39.3L95.7 40.2L95.8 41.2L95.8 42.2L95.6 43.0L94.9 43.5L94.0 43.7L93.1 43.8L92.1 43.9L91.1 44.0L90.1 44.0L89.1 44.1L88.2 44.3L87.2 44.3L86.2 44.3L85.2 44.3L84.2 44.4L83.3 44.6L82.3 44.6L81.3 44.7L80.3 44.7L79.3 44.7L78.3 44.8L77.3 44.9L76.4 45.0L75.7 44.8L75.4 44.0L75.5 43.1L75.7 42.2L76.0 41.3L76.5 40.5L77.3 40.1L78.2 39.9L79.2 39.9L80.2 39.7L81.1 39.6L82.1 39.5L83.1 39.4L84.1 39.4L85.0 39.2L86.0 39.1L87.0 39.0L87.9 38.9L88.9 38.7L89.8 38.6L90.8 38.5L91.8 38.4L92.7 38.2Z M48.4 4.6L49.4 4.5L50.4 4.5L51.3 4.5L52.3 4.6L53.3 4.7L54.3 4.7L55.3 4.7L56.3 4.7L57.3 4.7L58.4 4.7L59.3 4.8L60.3 4.9L61.3 5.0L62.3 5.1L63.3 5.1L64.2 5.2L65.2 5.3L66.2 5.4L67.2 5.5L68.1 5.6L69.1 5.8L70.0 5.9L70.9 6.2L71.8 6.6L72.5 7.2L73.0 8.0L73.5 8.8L73.9 9.6L74.3 10.5L74.8 11.3L75.2 12.1L75.7 12.9L76.1 13.8L76.6 14.6L77.0 15.4L77.5 16.3L77.9 17.1L78.3 17.9L78.3 18.6L77.7 19.0L76.8 18.9L75.8 18.8L74.9 18.6L73.9 18.5L73.0 18.3L72.0 18.2L71.1 18.1L70.1 18.0L69.1 17.8L68.2 17.7L67.2 17.6L66.2 17.5L65.2 17.5L64.3 17.4L63.3 17.2L62.3 17.2L61.3 17.2L60.3 17.2L59.3 17.1L58.3 17.0L57.3 16.9L56.3 16.9L55.3 16.9L54.3 16.9L53.3 16.9L52.3 16.9L51.2 16.9L50.2 16.9L49.2 16.9L48.2 16.9L47.2 16.9L46.2 16.9L45.2 16.9L44.2 16.9L43.2 16.9L42.2 17.0L41.2 17.0L40.2 17.1L39.3 17.2L38.3 17.2L37.3 17.2L36.3 17.3L35.3 17.4L34.4 17.5L33.4 17.6L32.4 17.7L31.5 17.8L30.5 18.0L29.5 18.1L28.6 18.2L27.6 18.3L26.7 18.5L25.7 18.6L24.7 18.7L23.8 18.9L22.9 19.1L22.0 19.0L21.6 18.6L21.7 17.8L22.1 17.0L22.5 16.1L23.0 15.3L23.4 14.5L23.9 13.6L24.4 12.8L24.9 12.0L25.3 11.2L25.8 10.4L26.2 9.5L26.7 8.7L27.2 7.9L27.8 7.2L28.5 6.6L29.3 6.2L30.2 5.9L31.2 5.7L32.1 5.6L33.1 5.5L34.1 5.4L35.1 5.4L36.0 5.3L37.0 5.2L38.0 5.1L39.0 5.0L39.9 4.9L40.9 4.7L41.9 4.7L42.9 4.7L43.9 4.7L44.9 4.7L46.0 4.7L46.9 4.7L47.9 4.6Z"/></symbol><symbol id="predicar-word" viewBox="0 0 100 11.5"><path fill="currentColor" fill-rule="evenodd" d="M52.7 0.3L52.5 0.5L52.5 11.2L52.6 11.3L52.6 11.3L56.8 11.3L56.9 11.2L56.9 10.7L57.0 10.7L56.9 10.5L56.9 10.2L57.0 10.2L56.9 10.0L56.9 9.1L57.0 9.1L56.9 0.4L56.8 0.3L56.7 0.3L52.8 0.3Z M0.0 11.3L0.1 11.3L4.4 11.3L4.5 11.2L4.5 8.4L4.6 8.2L4.8 8.1L8.2 8.2L8.6 8.1L9.3 8.1L9.5 7.9L9.9 7.9L10.9 7.4L11.5 6.9L11.9 6.3L12.2 5.7L12.3 5.1L12.4 4.8L12.4 3.7L12.3 3.3L12.2 2.9L11.9 2.2L11.5 1.6L10.9 1.0L10.3 0.7L9.4 0.4L9.0 0.4L8.3 0.3L0.1 0.3L0.0 0.5Z M4.5 3.3L4.5 3.2L4.5 3.2L4.5 3.2L4.5 3.1L4.6 3.0L6.4 3.0L6.5 3.1L6.6 3.1L6.6 3.1L6.7 3.1L6.7 3.1L6.8 3.1L6.8 3.2L6.9 3.2L7.0 3.2L7.1 3.2L7.1 3.2L7.2 3.2L7.2 3.3L7.3 3.3L7.3 3.3L7.3 3.3L7.5 3.4L7.5 3.5L7.7 3.6L7.7 3.7L7.7 3.7L7.7 3.8L7.7 3.8L7.7 3.9L7.8 3.9L7.8 3.9L7.8 4.0L7.8 4.3L7.8 4.3L7.8 4.5L7.8 4.5L7.8 4.6L7.7 4.6L7.7 4.6L7.7 4.7L7.7 4.7L7.6 4.8L7.6 4.8L7.5 4.9L7.5 4.9L7.4 5.0L7.4 5.0L7.3 5.1L7.2 5.1L7.2 5.2L7.1 5.2L7.1 5.2L6.9 5.2L6.9 5.2L6.8 5.2L6.8 5.2L6.7 5.2L6.7 5.3L6.6 5.3L6.6 5.3L6.4 5.3L6.4 5.3L5.8 5.3L5.7 5.4L4.7 5.4L4.7 5.3L4.6 5.3L4.5 5.3L4.5 5.2L4.5 5.2L4.5 5.2L4.5 5.1Z M86.9 0.4L86.8 11.1L87.0 11.3L91.2 11.3L91.3 11.2L91.3 7.9L91.5 7.7L92.4 7.7L93.1 8.0L93.6 8.7L94.5 10.3L95.1 10.9L96.0 11.4L96.7 11.5L97.9 11.5L98.9 11.3L100.0 10.8L100.0 10.6L99.5 8.9L99.4 8.8L99.2 8.8L98.8 9.0L98.5 8.9L98.1 8.6L97.5 7.5L97.1 7.2L97.1 7.0L97.2 6.9L98.2 6.4L99.0 5.6L99.1 5.3L99.2 5.1L99.3 4.6L99.5 4.3L99.5 3.4L99.1 2.3L98.9 1.8L98.3 1.2L97.4 0.7L96.7 0.4L95.6 0.3L89.4 0.2L87.0 0.3Z M91.3 3.2L91.4 3.0L91.7 3.0L91.8 3.0L91.9 3.0L92.0 3.0L92.3 3.0L92.4 3.0L92.6 3.0L92.6 3.0L93.4 3.0L93.4 3.1L93.6 3.1L93.6 3.1L93.7 3.1L93.8 3.1L93.8 3.1L93.8 3.2L93.9 3.2L94.0 3.2L94.0 3.2L94.1 3.2L94.3 3.2L94.3 3.3L94.3 3.3L94.4 3.3L94.4 3.3L94.5 3.4L94.5 3.4L94.6 3.4L94.6 3.4L94.7 3.5L94.7 3.5L94.8 3.6L94.8 3.6L94.8 3.7L94.8 3.7L94.8 3.8L94.8 3.8L94.9 3.9L94.9 4.0L94.9 4.0L94.9 4.2L94.9 4.3L94.9 4.3L94.9 4.3L94.9 4.4L94.8 4.5L94.8 4.5L94.8 4.6L94.8 4.6L94.7 4.7L94.7 4.7L94.6 4.8L94.6 4.8L94.5 4.9L94.5 4.9L94.4 5.0L94.3 5.0L94.2 5.0L94.1 5.0L94.1 5.0L94.0 5.0L93.9 5.1L93.9 5.1L93.8 5.1L93.8 5.1L93.8 5.2L93.2 5.2L93.2 5.2L91.5 5.2L91.4 5.2L91.4 5.2L91.3 5.1L91.3 4.9L91.3 4.9L91.3 3.3L91.3 3.3Z M81.6 0.3L76.6 0.3L76.3 0.4L76.2 0.6L76.1 1.0L75.3 2.7L74.6 4.6L74.4 4.9L74.3 5.2L74.1 5.7L73.9 6.2L73.6 6.8L73.6 7.0L73.4 7.3L73.3 7.8L72.6 9.3L72.5 9.7L72.1 10.5L71.9 11.2L71.9 11.3L76.4 11.3L76.6 11.0L76.9 9.9L77.0 9.7L77.2 9.5L80.8 9.5L81.2 10.0L81.4 11.0L81.6 11.3L81.7 11.3L86.2 11.3L86.2 11.1L85.7 10.0L85.3 8.9L84.3 6.7L82.9 3.1L82.4 2.1L81.9 0.6Z M78.9 3.7L79.1 3.7L79.2 3.8L79.2 3.8L79.2 3.8L79.2 3.9L79.2 3.9L79.2 4.0L79.3 4.0L79.3 4.1L79.3 4.1L79.3 4.2L79.3 4.2L79.3 4.2L79.4 4.3L79.4 4.3L79.4 4.3L79.4 4.4L79.4 4.4L79.4 4.5L79.5 4.5L79.5 4.6L79.5 4.6L79.5 4.7L79.5 4.7L79.5 4.8L79.5 4.8L79.5 4.8L79.6 4.9L79.6 4.9L79.6 5.0L79.6 5.0L79.6 5.1L79.6 5.1L79.7 5.2L79.7 5.2L79.7 5.3L79.7 5.4L79.7 5.4L79.7 5.5L79.8 5.5L79.8 5.6L79.8 5.6L79.8 5.6L79.8 5.7L79.8 5.7L79.9 5.7L79.9 5.8L79.9 5.8L79.9 6.0L79.9 6.0L79.9 6.1L80.0 6.2L80.0 6.2L80.0 6.2L80.0 6.3L80.0 6.3L80.0 6.3L80.1 6.4L80.1 6.4L80.1 6.5L80.1 6.5L80.1 6.5L80.1 6.7L80.0 6.8L79.8 6.8L79.8 6.8L79.7 6.8L79.6 6.8L79.1 6.8L79.1 6.8L78.7 6.8L78.7 6.8L78.5 6.8L78.4 6.8L78.2 6.8L78.2 6.8L78.1 6.8L77.9 6.7L77.9 6.5L78.0 6.5L78.0 6.4L78.0 6.4L78.0 6.4L78.0 6.3L78.0 6.3L78.1 6.3L78.1 6.2L78.1 6.2L78.1 6.2L78.1 6.2L78.1 6.1L78.2 6.1L78.2 6.0L78.2 5.9L78.2 5.8L78.2 5.8L78.2 5.7L78.3 5.7L78.3 5.6L78.3 5.6L78.3 5.6L78.3 5.5L78.3 5.5L78.4 5.5L78.4 5.4L78.4 5.3L78.4 5.3L78.4 5.2L78.4 5.2L78.5 5.2L78.5 5.1L78.5 5.1L78.5 5.0L78.5 4.9L78.5 4.8L78.6 4.8L78.6 4.7L78.6 4.7L78.6 4.6L78.6 4.6L78.6 4.5L78.6 4.4L78.6 4.4L78.7 4.3L78.7 4.3L78.7 4.3L78.7 4.3L78.7 4.2L78.7 4.2L78.8 4.2L78.8 4.1L78.8 4.1L78.8 4.0L78.8 4.0L78.8 3.8L78.9 3.8L78.9 3.7Z M50.3 2.2L49.5 1.4L48.6 0.8L48.2 0.7L48.0 0.6L47.7 0.6L47.1 0.4L46.6 0.4L46.3 0.3L45.4 0.2L38.7 0.3L38.5 0.3L38.4 0.4L38.4 11.2L38.6 11.3L45.7 11.3L46.2 11.2L46.8 11.2L48.0 10.9L48.8 10.6L49.9 9.8L50.2 9.4L50.8 8.6L51.3 7.3L51.3 6.8L51.4 6.7L51.5 4.7L51.3 4.2L51.1 3.4L50.9 2.9Z M46.3 4.0L46.5 4.2L46.5 4.3L46.7 4.5L46.8 4.6L46.8 4.7L46.8 4.7L46.8 4.8L46.9 4.8L46.9 4.9L46.9 4.9L46.9 5.1L47.0 5.2L47.0 5.5L47.1 5.5L47.1 6.1L47.0 6.2L47.0 6.2L46.9 6.4L46.9 6.5L46.9 6.5L46.9 6.7L46.8 6.9L46.8 7.0L46.7 7.1L46.7 7.1L46.6 7.1L46.5 7.4L46.3 7.5L46.3 7.5L46.2 7.6L46.2 7.6L46.1 7.8L45.9 7.8L45.8 7.9L45.4 8.0L45.4 8.0L45.3 8.1L45.2 8.1L45.2 8.1L42.8 8.1L42.7 8.0L42.7 7.9L42.6 7.9L42.6 3.8L42.7 3.7L42.7 3.7L42.8 3.6L42.8 3.5L42.9 3.5L42.9 3.5L44.9 3.5L45.0 3.5L45.1 3.5L45.1 3.5L45.2 3.5L45.2 3.5L45.3 3.5L45.5 3.6L45.6 3.6L45.6 3.6L45.8 3.7L46.0 3.8L46.1 3.9L46.1 3.9L46.2 3.9Z M37.2 0.3L27.8 0.3L27.3 0.4L27.2 11.2L27.3 11.3L35.7 11.3L37.4 11.3L37.5 10.5L37.5 8.4L37.4 8.2L37.2 8.2L31.9 8.2L31.7 8.1L31.6 7.9L31.6 7.3L31.8 7.0L35.6 7.1L36.1 7.0L36.4 7.1L36.6 6.9L36.7 4.6L36.6 4.4L31.8 4.4L31.6 4.2L31.6 3.6L31.7 3.4L31.9 3.3L37.2 3.3L37.4 3.2L37.4 0.4Z M13.4 0.4L13.3 10.0L13.4 11.2L13.4 11.3L17.6 11.3L17.7 11.2L17.7 7.9L17.9 7.7L18.9 7.7L19.5 8.0L19.8 8.2L20.2 8.7L21.0 10.3L21.8 11.1L22.4 11.3L23.1 11.5L24.6 11.5L24.9 11.4L25.3 11.3L26.4 10.9L26.5 10.7L26.6 10.6L26.4 10.2L26.4 9.9L26.2 9.7L26.1 8.9L25.9 8.8L25.7 8.8L25.4 9.0L25.2 9.0L24.9 8.8L24.6 8.5L24.0 7.5L23.5 7.1L23.5 7.0L23.6 6.8L23.9 6.8L25.0 6.1L25.3 5.7L25.6 5.2L25.7 4.8L25.8 4.4L25.9 3.4L25.7 2.6L25.4 1.9L24.7 1.2L24.2 0.8L23.4 0.5L22.8 0.3L21.7 0.2L13.6 0.3Z M17.7 3.2L17.8 3.1L17.9 3.1L17.9 3.0L20.1 3.0L20.2 3.1L20.2 3.1L20.3 3.1L20.3 3.1L20.4 3.1L20.4 3.1L20.5 3.2L20.5 3.2L20.5 3.2L20.6 3.2L20.7 3.3L20.7 3.3L20.8 3.3L20.8 3.3L20.9 3.3L20.9 3.3L20.9 3.3L21.0 3.3L21.1 3.5L21.1 3.5L21.3 3.7L21.3 3.7L21.3 3.8L21.3 4.0L21.4 4.0L21.4 4.4L21.3 4.4L21.3 4.5L21.3 4.5L21.3 4.5L21.1 4.7L21.1 4.7L21.0 4.8L20.9 4.8L20.9 4.9L20.8 4.9L20.7 5.0L20.6 5.0L20.5 5.0L20.5 5.0L20.5 5.0L20.4 5.0L20.3 5.1L20.3 5.1L20.3 5.2L20.2 5.2L20.2 5.2L18.5 5.2L18.5 5.2L18.3 5.2L18.2 5.2L17.9 5.2L17.8 5.2L17.8 5.2L17.7 5.1L17.7 5.0L17.7 5.0L17.7 3.7L17.7 3.7L17.7 3.4L17.7 3.4L17.7 3.3L17.7 3.3Z M68.1 0.5L66.1 0.0L63.3 0.0L61.7 0.4L60.9 0.7L59.9 1.4L59.2 2.1L58.7 2.8L58.4 3.5L58.0 5.2L58.0 6.2L58.2 7.2L58.5 8.2L59.0 9.0L60.0 10.1L60.7 10.6L61.8 11.1L63.5 11.5L66.5 11.5L66.7 11.4L67.3 11.4L67.9 11.2L68.2 11.1L69.2 10.7L69.9 10.3L70.6 9.6L71.2 8.9L71.6 8.2L72.0 7.0L71.9 6.8L67.9 6.2L67.7 6.3L67.6 6.7L67.2 7.2L66.7 7.8L66.1 8.1L65.3 8.2L64.8 8.2L63.6 7.8L63.0 7.2L62.7 6.7L62.5 6.0L62.5 5.2L62.7 4.5L63.4 3.7L64.3 3.4L65.2 3.4L66.1 3.7L66.5 4.1L67.0 4.9L68.3 4.8L69.5 4.4L70.0 4.4L70.2 4.3L71.0 4.2L71.0 3.7L70.9 3.5L70.9 3.3L70.6 2.5L70.3 2.2L69.3 1.2Z"/></symbol></svg>
+<nav class="nav">
+  <div class="nav-in">
+    <a class="brand" href="#top">
+      <svg class="brand-mark" viewBox="0 0 100 71.0" aria-hidden="true"><use href="#predicar-car"/></svg>
+      <span class="brand-txt"><svg class="brand-word" viewBox="0 0 100 11.5" role="img" aria-label="Predicar"><use href="#predicar-word"/></svg><i>AUTOMOTIVE</i></span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#casos" data-i18n="nav.casos">Casos reales</a>
+      <a href="#informe" data-i18n="nav.informe">Ejemplo de informe</a>
+      <a href="#peritaje" data-i18n="nav.peritaje">Cómo es el peritaje</a>
+      <a href="#respaldo" data-i18n="nav.respaldo">Respaldo</a>
+      <a href="#servicios" data-i18n="nav.servicios">Servicios</a>
+      <a href="#proceso" data-i18n="nav.proceso">Cómo es el proceso</a>
+      <a href="#agendar" data-i18n="nav.agendar">Agendar cita</a>
+    </div>
+    <div class="lang" role="group" aria-label="Idioma">
+      <button data-lang="es" class="on">ES</button><button data-lang="en">EN</button><button data-lang="de">DE</button>
+    </div>
+    <button class="btn btn-ghost nav-toggle" id="navToggle" aria-label="Menú" aria-expanded="false">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M1 3.5h14M1 8h14M1 12.5h14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+    </button>
+    <button class="btn btn-blue" id="goSistema">
+      <svg width="12" height="14" viewBox="0 0 13 15" fill="none" aria-hidden="true"><rect x="1" y="6" width="11" height="8" rx="1.6" stroke="currentColor" stroke-width="1.5"/><path d="M3.6 6V4.2a2.9 2.9 0 015.8 0V6" stroke="currentColor" stroke-width="1.5"/></svg>
+      <span data-i18n="nav.sistema">Acceso al sistema</span>
+    </button>
+  </div>
+</nav>
 
-<script src="supabase.js"></script>
+<main id="publico">
 
+<div class="hero" id="top">
+  <div class="wrap hero-in">
+    <div>
+      <p class="eyebrow" data-i18n="hero.eyebrow">Peritaje automotriz · Lima, Perú</p>
+      <h1><span data-i18n="hero.h1a">Entérate exactamente qué estás comprando antes de pagar</span> <em data-i18n="hero.h1b">antes de firmar.</em></h1>
+      <p class="hero-sub" data-i18n="hero.sub">Peritaje de ingeniería para autos seminuevos. Medimos, documentamos y te decimos si conviene comprar, negociar o retirarte.</p>
+      <div class="hero-cta">
+        <a class="btn btn-blue" href="#casos" data-i18n="hero.cta1">Ver 9 casos reales</a>
+      </div>
+      <div class="trust">
+        <div>
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 1.7l7 2.6v5.3c0 4.2-2.9 7.6-7 8.7-4.1-1.1-7-4.5-7-8.7V4.3l7-2.6z" stroke="#4A85FF" stroke-width="1.5" stroke-linejoin="round"/><path d="M6.9 10.2l2.2 2.2 4-4.4" stroke="#4A85FF" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span><b data-i18n="trust.1t">Un solo auto, no tres</b><small data-i18n="trust.1d">Con nosotros revisas el correcto a la primera</small></span>
+        </div>
+        <div>
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7.3" stroke="#4A85FF" stroke-width="1.5"/><path d="M10 5.6V10l3 1.8" stroke="#4A85FF" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span><b data-i18n="trust.2t">Informe el mismo día</b><small data-i18n="trust.2d">PDF con fotos, hallazgos y costos reales</small></span>
+        </div>
+        <div>
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3.4 16.6l4.2-4.2M12.1 3.6a3.4 3.4 0 004.5 4.5l-8.4 8.4a2.1 2.1 0 01-3-3l8.4-8.4z" stroke="#4A85FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span><b data-i18n="trust.3t">Ingeniería, no opinión</b><small data-i18n="trust.3d">Ingeniero mecatrónico a cargo del peritaje</small></span>
+        </div>
+      </div>
+    </div>
+
+    <a class="rep" href="#informe">
+      <span class="rep-top">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.4 1.6h6l3.2 3.2v9.6H3.4z" stroke="#98A1B1" stroke-width="1.3" stroke-linejoin="round"/><path d="M9.4 1.6v3.2h3.2M5.6 8.4h4.8M5.6 11h3.2" stroke="#98A1B1" stroke-width="1.3" stroke-linecap="round"/></svg>
+        <span class="t" data-i18n="rep.k">Informe de inspección precompra</span>
+        <span class="badge" data-i18n="rep.badge">Caso real</span>
+      </span>
+      <span class="rep-page"><img src="img-02.jpg" alt="Primera página de un informe de inspección Predicar"></span>
+      <span class="rep-foot">
+        <span><span class="lbl" data-i18n="rep.veh">Vehículo</span><span class="val">Lexus RX350 2017</span></span>
+        <span><span class="lbl" data-i18n="rep.pages">Entrega</span><span class="val" data-i18n="rep.pagesv">20 páginas</span></span>
+        <span class="cta" data-i18n="rep.cta">Ver el informe completo &rarr;</span>
+      </span>
+      <span class="rep-note" data-i18n="rep.note">Informe real · datos del cliente y del vehículo omitidos</span>
+    </a>
+  </div>
+</div>
+
+<!-- CASOS REALES -->
+<section id="casos">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow" data-i18n="casos.eyebrow">Prueba, no promesas</p>
+      <h2 data-i18n="casos.h2">Nueve autos. Nueve decisiones que cambiaron.</h2>
+      <p data-i18n="casos.sub">Cada video muestra qué encontramos, qué significaba en dinero y qué hizo el cliente con esa información.</p>
+      
+    </div>
+    <div class="reels" id="reelsGrid"></div>
+    <p class="reels-note"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1.6" y="1.6" width="12.8" height="12.8" rx="4" stroke="#5F6979" stroke-width="1.4"/><circle cx="8" cy="8" r="3.1" stroke="#5F6979" stroke-width="1.4"/><circle cx="11.9" cy="4.1" r="1" fill="#5F6979"/></svg><span data-i18n="reels.note">Videos publicados en @predicar.pe — desliza para ver más</span></p>
+    <div class="casos" id="casosGrid"></div>
+    <p class="tbl-hint"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M1.5 8h13M11 4.5 14.5 8 11 11.5M5 4.5 1.5 8 5 11.5" stroke="#5F6979" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="tb.hint">Desliza la tabla para ver todas las columnas</span></p>
+    <div class="casos-sum" id="casosSum"></div>
+  </div>
+</section>
+
+<!-- INFORME -->
+<section id="informe" class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow" data-i18n="inf.eyebrow">El entregable</p>
+      <h2 data-i18n="inf.h2">El informe que te da poder de negociación</h2>
+      <p data-i18n="inf.sub">Un informe real, completo: datos del vehículo, carrocería, motor, escáner OBD, prueba de manejo, análisis legal y la conclusión del inspector con la recomendación de compra.</p>
+      <span class="sec-flag" data-i18n="inf.flag">Informe real de un peritaje · la extensión varía según el vehículo · datos del cliente omitidos</span>
+    </div>
+    <div class="claim" style="margin:0 0 24px">
+      <svg width="22" height="22" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M12.4 3.2a3.6 3.6 0 004.8 4.8l-8.9 8.9a2.2 2.2 0 01-3.2-3.2l8.9-8.9z" stroke="#4A85FF" stroke-width="1.6" stroke-linejoin="round"/><path d="M3.6 16.8h.01" stroke="#4A85FF" stroke-width="2" stroke-linecap="round"/></svg>
+      <span><b data-i18n="inf.taller">Con este informe vas a tu taller de confianza</b><p data-i18n="inf.tallerp">Llegas sabiendo exactamente qué hay que reparar y cuánto debería costar. Pides solo lo necesario y nadie te cobra de más.</p></span>
+    </div>
+    <div class="pages" id="pagesGrid"></div>
+  </div>
+</section>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true">
+  <button class="lb-close" id="lbClose" data-i18n="inf.close">Cerrar</button>
+  <img id="lbImg" alt="">
+  <div class="lb-nav">
+    <button id="lbPrev" aria-label="Anterior">&larr;</button>
+    <span id="lbNum">1 / 11</span>
+    <button id="lbNext" aria-label="Siguiente">&rarr;</button>
+  </div>
+</div>
+
+<!-- PERITAJE / COMPARATIVA -->
+<section id="peritaje">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow" data-i18n="cmp.eyebrow">Qué incluye nuestro peritaje</p>
+      <h2 data-i18n="cmp.h2">Peritaje completo y transparente, no una inspección básica</h2>
+      <p data-i18n="cmp.sub">La diferencia no está en mirar el auto. Está en medir, verificar los papeles y traducir cada hallazgo a un número.</p>
+    </div>
+    <div class="claim" style="margin:0 0 22px">
+      <svg width="22" height="22" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7.6" stroke="#4A85FF" stroke-width="1.6"/><path d="M10 6.2v4.4" stroke="#4A85FF" stroke-width="1.8" stroke-linecap="round"/><circle cx="10" cy="13.6" r="1" fill="#4A85FF"/></svg>
+      <span><b data-i18n="diff.b">Un servicio común solo te dice si el auto está bien o mal</b><p data-i18n="diff.p">No te ayuda a ahorrar en reparaciones ni en combustible. Esa diferencia te puede costar más de S/ 6 000 en el primer año.</p></span>
+    </div>
+    <div class="cmp" id="cmpTable"></div>
+
+    <div class="sec-head" style="margin-top:clamp(44px,6vw,72px)">
+      <p class="eyebrow" data-i18n="save.eyebrow">Lo que te hace ahorrar</p>
+      <h2 data-i18n="save.h2">No solo revisamos autos: cuidamos tu inversión</h2>
+    </div>
+    <div class="saves" id="savesGrid"></div>
+  </div>
+</section>
+
+
+
+<!-- RESPALDO -->
+<section id="respaldo" class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow" data-i18n="bk.eyebrow">¿Quién realiza el trabajo?</p>
+      <h2 data-i18n="bk.h2">Peritaje liderado por un ingeniero mecatrónico</h2>
+      <p data-i18n="bk.sub">Quien revisa tu auto es quien diseñó y mantuvo vehículos de alta gama. Esa es la diferencia entre una opinión y un diagnóstico.</p>
+    </div>
+
+    <div class="backing">
+      <div class="face">
+        <span class="ring"><img src="img-01.png" alt="Andres Talavera, ingeniero mecatrónico de Predicar Automotive"></span>
+        <h3>Andres Talavera</h3>
+        <p class="role" data-i18n="bk.role">Ingeniero Mecatrónico</p>
+        <p class="org" data-i18n="bk.org">Fundador de Predicar · PUCP</p>
+      </div>
+      <div class="backing-body">
+        <div class="cred" id="credGrid"></div>
+        <p data-i18n="bk.p">No te hacemos revisar tres autos. La asesoría previa define cuál vale la pena inspeccionar y el peritaje confirma si se compra, se negocia o se descarta. Una sola inspección, una sola decisión.</p>
+        <div class="brands">
+          <p class="k" data-i18n="bk.brands">Andrés trabajó en el diseño y la calidad de marcas como</p>
+          <div class="brand-list">
+            <span><b>TESLA</b><i>Estados Unidos</i></span><span><b>FERRARI</b><i>Italia</i></span><span><b>AUDI</b><i>Alemania</i></span><span><b>VOLKSWAGEN</b><i>Alemania</i></span><span><b>BMW</b><i>Alemania</i></span><span><b>McLAREN</b><i>Inglaterra</i></span><span><b>NISSAN</b><i>Japón y México</i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vs">
+      <div class="vs-side us">
+        <p class="k">PREDICAR</p>
+        <p class="n"><b>1</b></p>
+        <p class="d" data-i18n="vs.us">auto revisado en promedio, porque primero definimos cuál revisar</p>
+      </div>
+      <div class="vs-mid"><span>VS</span></div>
+      <div class="vs-side them">
+        <p class="k" data-i18n="vs.themk">Otras empresas</p>
+        <p class="n"><b>3</b></p>
+        <p class="d" data-i18n="vs.them">autos revisados en promedio, y tú pagas cada inspección</p>
+      </div>
+    </div>
+
+    <div class="claim">
+      <svg width="22" height="22" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 1.7l7 2.6v5.3c0 4.2-2.9 7.6-7 8.7-4.1-1.1-7-4.5-7-8.7V4.3l7-2.6z" stroke="#4A85FF" stroke-width="1.6" stroke-linejoin="round"/><path d="M6.9 10.2l2.2 2.2 4-4.4" stroke="#4A85FF" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <span><b data-i18n="claim.b">El único peritaje automotriz en Lima dirigido por un ingeniero mecatrónico</b><p data-i18n="claim.p">No solo revisamos autos: cuidamos tu inversión.</p></span>
+    </div>
+  </div>
+</section>
+
+
+<!-- INFORME LEGAL -->
+
+<!-- SERVICIOS -->
+<section id="servicios" class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow" data-i18n="srv.eyebrow">Servicios</p>
+      <h2 data-i18n="srv.h2">Empieza por una conversación de 30 minutos</h2>
+      <p data-i18n="srv.sub">La mayoría de clientes empieza por la asesoría: definimos qué auto te conviene según tu uso real y tu presupuesto, antes de gastar en inspecciones.</p>
+    </div>
+    <div class="planes" id="planesGrid"></div>
+    <div class="gift">
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="2.5" y="7.5" width="15" height="10" rx="1.6" stroke="#4A85FF" stroke-width="1.5"/><path d="M2.5 7.5h15M10 7.5v10" stroke="#4A85FF" stroke-width="1.5"/><path d="M10 7.5S8.7 3.5 6.8 3.5a1.9 1.9 0 100 4H10zm0 0s1.3-4 3.2-4a1.9 1.9 0 110 4H10z" stroke="#4A85FF" stroke-width="1.5" stroke-linejoin="round"/></svg>
+      <span data-i18n="srv.gift">Al contratar un peritaje, la asesoría previa va incluida — para que no termines revisando tres autos.</span>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESO -->
+<section id="proceso" class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow" data-i18n="proc.eyebrow">Cómo trabajamos</p>
+      <h2 data-i18n="proc.h2">De la reserva al informe, en un día</h2>
+    </div>
+    <div class="steps" id="stepsGrid"></div>
+  </div>
+</section>
+
+<!-- AGENDAR -->
+<section id="agendar">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow" data-i18n="book.eyebrow">Reserva</p>
+      <h2 data-i18n="book.h2">Elige tu horario y págalo como te quede cómodo</h2>
+      <p data-i18n="book.sub">Pagas desde Perú o desde el extranjero. Al confirmar, la cita queda en tu calendario y recibes la confirmación por WhatsApp.</p>
+    </div>
+
+    <div class="pays" style="margin-bottom:20px" id="paysGrid"></div>
+
+    <div class="cuentas">
+      <h3 data-i18n="pay.h">Datos para el pago</h3>
+      <p class="cuentas-nota" data-i18n="pay.nota">La reserva se abona por adelantado. Sube el comprobante en el formulario y el horario queda bloqueado a tu nombre.</p>
+      <dl>
+        <div><dt data-i18n="pay.bcp">BCP &middot; cuenta en d&oacute;lares</dt>
+          <dd><b>19295383221186</b><button type="button" class="cp" data-cp="19295383221186" data-i18n="pay.copiar">Copiar</button></dd></div>
+        <div><dt data-i18n="pay.cci">CCI</dt>
+          <dd><b>00219219538322118635</b><button type="button" class="cp" data-cp="00219219538322118635" data-i18n="pay.copiar">Copiar</button></dd></div>
+        <div><dt data-i18n="pay.plin">Plin &middot; Yape</dt>
+          <dd><b>955 507 470</b><button type="button" class="cp" data-cp="955507470" data-i18n="pay.copiar">Copiar</button></dd></div>
+        <div><dt data-i18n="pay.tit">Titular</dt><dd><b>Andr&eacute;s Talavera</b></dd></div>
+        <div><dt data-i18n="pay.tc">Tipo de cambio</dt><dd><b>S/ 3.42</b></dd></div>
+      </dl>
+    </div>
+
+    <div class="book">
+      <form class="form" id="bookForm" novalidate>
+        <div class="f-grid">
+          <div class="field full">
+            <label for="f-srv" data-i18n="f.srv">Servicio</label>
+            <select id="f-srv"></select>
+          </div>
+          <div class="field"><label for="f-fecha" data-i18n="f.fecha">Fecha</label><input id="f-fecha" type="date" value="2026-09-08"></div>
+          <div class="field"><label for="f-pago" data-i18n="f.pago">Método de pago</label>
+            <select id="f-pago"><option>Yape</option><option>Plin</option><option>Visa / Mastercard</option><option>Wise</option><option>Revolut</option><option>Transferencia BCP</option></select>
+          </div>
+          <div class="field full"><label data-i18n="f.hora">Hora disponible</label>
+            <div class="slots" id="slots"></div>
+            <p class="slot-note" data-i18n="f.dur">La inspección toma entre 45 minutos y 1 hora.</p>
+          </div>
+          <div class="field"><label for="f-nom" data-i18n="f.nom">Nombre completo</label><input id="f-nom" type="text"></div>
+          <div class="field"><label for="f-tel" data-i18n="f.tel">WhatsApp</label><input id="f-tel" type="tel" placeholder="+51 9__ ___ ___"></div>
+          <div class="field full"><label for="f-mail" data-i18n="f.mail">Correo</label><input id="f-mail" type="email" placeholder="tucorreo@ejemplo.com"></div>
+          <div class="field full"><label for="f-dir" data-i18n="f.dir">Dirección donde está el vehículo</label><input id="f-dir" type="text" placeholder="Av. Javier Prado 1234, San Isidro"></div>
+          <div class="field full"><label for="f-obs" data-i18n="f.obs">Algo que debamos saber</label><textarea id="f-obs"></textarea></div>
+          <div class="field full"><label for="f-voucher" data-i18n="f.voucher">Comprobante de pago</label><input id="f-voucher" type="file" accept="image/*,application/pdf"></div>
+        </div>
+        <button class="btn btn-blue" type="submit" data-i18n="f.submit">Confirmar mi cita</button>
+        <p class="note" data-i18n="f.note">Al confirmar, el horario queda reservado y recibes el correo de confirmación.</p>
+        <div class="ok-msg" id="bookOk" hidden></div>
+      </form>
+
+      <aside class="aside">
+        <h3 data-i18n="auto.h3">Qué pasa al confirmar</h3>
+        <p data-i18n="auto.p">Todo automático, sin coordinar por chat.</p>
+        <div class="auto" id="autoList"></div>
+        <div class="hairline" style="margin:22px 0"></div>
+        <h3 data-i18n="cov.h3">Cobertura en Lima</h3>
+        <div class="chips" style="margin-top:14px">
+          <span class="chip">La Molina</span><span class="chip">San Isidro</span><span class="chip">San Borja</span>
+          <span class="chip">Miraflores</span><span class="chip">San Miguel</span><span class="chip">Magdalena</span>
+          <span class="chip">Jesús María</span><span class="chip">Surco</span><span class="chip">Lince</span>
+        </div>
+        <a class="btn btn-ghost" href="https://wa.me/51972598538" target="_blank" rel="noopener" style="margin-top:18px;width:100%">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0a8 8 0 00-6.9 12L0 16l4.1-1.1A8 8 0 108 0zm0 1.5A6.5 6.5 0 114.6 13.6l-.3-.2-2.4.6.6-2.3-.2-.3A6.5 6.5 0 018 1.5zm3.7 8.2c-.2-.1-1.2-.6-1.4-.6-.2-.1-.3-.1-.4.1l-.6.7c-.1.1-.2.2-.4.1a5.3 5.3 0 01-2.6-2.3c-.2-.3.2-.3.5-1 0-.1 0-.2 0-.3l-.6-1.3c-.1-.3-.3-.3-.4-.3h-.4c-.1 0-.3 0-.5.3-.2.2-.7.7-.7 1.7s.7 2 .8 2.1c.1.2 1.4 2.2 3.5 3 1.3.5 1.8.6 2.4.5.4 0 1.2-.5 1.4-1 .2-.5.2-.9.1-1z"/></svg>
+          <span data-i18n="cov.wa">Estoy fuera de esa zona</span>
+        </a>
+      </aside>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- SISTEMA -->
+<!-- El panel interno vive en sistema.html -->
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="brand" href="#top">
+          <svg class="brand-mark" viewBox="0 0 100 71.0" aria-hidden="true"><use href="#predicar-car"/></svg>
+          <span class="brand-txt"><svg class="brand-word" viewBox="0 0 100 11.5" role="img" aria-label="Predicar"><use href="#predicar-word"/></svg><i>AUTOMOTIVE</i></span>
+        </a>
+        <p class="muted" style="margin-top:15px;font-size:13.5px;font-weight:300;max-width:36ch" data-i18n="foot.tag">Peritaje e inspección vehicular en Lima. No solo revisamos autos: cuidamos tu inversión.</p>
+      </div>
+      <div>
+        <h4 data-i18n="foot.srv">Servicios</h4>
+        <ul>
+          <li><a href="#servicios" data-i18n="foot.s1">Asesoría 30 min</a></li>
+          <li><a href="#servicios" data-i18n="foot.s2">Peritaje automotriz</a></li>
+          <li><a href="#servicios" data-i18n="foot.s3">Búsqueda vehicular</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="foot.pay">Pagos</h4>
+        <ul><li>Yape · Plin</li><li>Visa · Mastercard</li><li>Wise · Revolut</li></ul>
+      </div>
+      <div>
+        <h4 data-i18n="foot.contact">Contacto</h4>
+        <ul>
+          <li><a href="https://wa.me/51972598538" target="_blank" rel="noopener">WhatsApp +51 972 598 538</a></li>
+          <li><a href="https://instagram.com/predicar.pe" target="_blank" rel="noopener">@predicar.pe</a></li>
+          <li>Lima, Perú</li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">
+      <span>Predicar Automotive Perú S.A.C.</span>
+      <span data-i18n="foot.proto">Prototipo — contenido de ejemplo</span>
+    </div>
+  </div>
+</footer>
+
+
+
+
+<script src="config.js"></script>
+<script src="idiomas.js"></script>
+<script src="datos.js"></script>
 <script src="app.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
-</body>
-</html>
+<script src="agenda.js"></script>
+</body></html>
